@@ -1,6 +1,7 @@
 package content;
 
 import chrriis.dj.nativeswing.swtimpl.components.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
@@ -14,9 +15,12 @@ public class LegalContent {
     private JWebBrowser webBrowser;
     private JPanel webBrowserPanel;
     private String strNewResource;
+    BookmarkContent bookmarkContent;
+    private String strMode;
 
-    public LegalContent(Logger logger) {
+    public LegalContent(Logger logger, String strMode) {
         this.logger = logger;
+        this.strMode = strMode;
     }
 
     public JComponent createLegalContent() {
@@ -26,7 +30,9 @@ public class LegalContent {
 
         webBrowser = new JWebBrowser();
         webBrowserPanel.setBorder(BorderFactory.createTitledBorder(GLOBAL_CONTENT));
-        webBrowser.setBarsVisible(true);
+        if (Objects.equals(strMode, ARG_ADDRESS)) {
+            webBrowser.setBarsVisible(true);
+        } else webBrowser.setBarsVisible(false);
         webBrowser.setMenuBarVisible(false);
         webBrowser.navigate(urlBookmarks);
         webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
@@ -59,6 +65,18 @@ public class LegalContent {
                     }
                 });
             }
+
+            @Override
+            public void locationChanged(WebBrowserNavigationEvent e) {
+                super.locationChanged(e);
+                final String strLocation = e.getNewResourceLocation();
+                logger.info("загружена ссылка: " + strLocation);
+                if (strLocation.indexOf(urlBookmarks, 0) != -1) {
+                    String htmlSource = webBrowser.getHTMLContent();
+                    bookmarkContent = new BookmarkContent(logger, htmlSource);
+                    bookmarkContent.typeList();
+                }
+            }
         });
 
         contentPane.add(webBrowserPanel, BorderLayout.CENTER);
@@ -79,14 +97,14 @@ public class LegalContent {
     }
 
     private boolean isContentLegal() {
-         return (strNewResource.indexOf("http://tredman.com", 0) != -1) ||
+        return (strNewResource.indexOf("http://tredman.com", 0) != -1) ||
                 (strNewResource.indexOf("dterod.com", 0) != -1) ||
                 (strNewResource.indexOf(FILE_HTML_CONTENT, 0) != -1) ||
                 (strNewResource.indexOf(urlBookmarks, 0) == 0) ||
-               ((strNewResource.indexOf(urlMain, 0) == 0) && (strNewResource.length() == urlMain.length())) ||
+                ((strNewResource.indexOf(urlMain, 0) == 0) && (strNewResource.length() == urlMain.length())) ||
                 (strNewResource.indexOf(urlLogOut, 0) != -1) ||
                 (strNewResource.indexOf(urlFavoritesOut, 0) != -1) ||
-                (strNewResource.indexOf(urlContent, 0) != -1);
+                bookmarkContent.isResourseInListLegalURL(strNewResource);
     }
 
 }

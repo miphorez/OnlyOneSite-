@@ -21,7 +21,7 @@ public class UtilsForAll {
             return null;
         }
         //log выводится только в консоль
-        utils.UtilsForAll.setLoggerConsoleHandler(logger);
+//        utils.UtilsForAll.setLoggerConsoleHandler(logger);
 
         XMLProgramSettings xmlProgramSettings = new XMLProgramSettings(logger);
         if (!xmlProgramSettings.isXMLSettingsFile()){
@@ -91,7 +91,7 @@ public class UtilsForAll {
         return System.getenv("PROGRAMDATA");
     }
 
-    static boolean setLoggerConsoleHandler(Logger logger) {
+    public static boolean setLoggerConsoleHandler(Logger logger) {
         //удалить все хэндлерсы для логгера
         Handler[] handlers = logger.getHandlers();
         for (Handler handler : handlers) {

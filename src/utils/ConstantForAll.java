@@ -1,10 +1,15 @@
 package utils;
 
 public class ConstantForAll {
+    public static String PROGRAM_TITLE = "Only One Site";
+    public static String PROGRAM_VERSION = "1.0.0";
     public static final String LS = System.getProperty("line.separator");
 
     //логгер
     public static String GLOBAL_CONTENT = " www.online-life.cc ";
+
+    //режимы работы программы через аргументы запуска
+    public static String ARG_ADDRESS = "-adr";
 
     //контент
     public static final String urlAdminPass = "http://adminpass/";
