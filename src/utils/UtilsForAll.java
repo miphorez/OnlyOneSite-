@@ -41,7 +41,7 @@ public class UtilsForAll {
     }
 
     public static void exitFromProgram() {
-//        NativeInterface.close();
+        PrefParam.savePosAndSizeMain();
         System.exit(0);
     }
 
