@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.io.File;
 import java.util.logging.Logger;
 
-import static main.mainContent.saveContent;
+import static content.LegalContent.saveContent;
 import static org.junit.Assert.*;
 import static utils.ConstantForAll.urlContent;
 import static utils.UtilsForAll.getFileNameHTMLContent;
