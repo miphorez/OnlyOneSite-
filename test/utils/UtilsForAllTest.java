@@ -9,7 +9,6 @@ import org.junit.Test;
 import java.io.File;
 import java.util.logging.Logger;
 
-import static content.LegalContent.saveContent;
 import static org.junit.Assert.*;
 import static utils.ConstantForAll.urlContent;
 import static utils.UtilsForAll.getFileNameHTMLContent;
@@ -37,7 +36,7 @@ public class UtilsForAllTest {
         logger.info("логгер запущен");
         Document doc = Jsoup.connect(urlContent).get();
 //        System.out.println(doc.toString());
-        assertTrue(saveContent(logger, doc.toString(), getFileNameHTMLContent()));
+//        assertTrue(saveContent(logger, doc.toString(), getFileNameHTMLContent()));
     }
 
     @Test

@@ -1,11 +1,9 @@
 package utils;
 
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import xml.XMLProgramSettings;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -38,7 +36,7 @@ public class UtilsForAll {
         return logger;
     }
 
-    public static Class getMainClass() {
+    private static Class getMainClass() {
         return main.Main.class;
     }
 
@@ -89,11 +87,11 @@ public class UtilsForAll {
         return getDirectoryProgramData() + "\\" + strDirName;
     }
 
-    public static String getDirectoryProgramData() {
+    private static String getDirectoryProgramData() {
         return System.getenv("PROGRAMDATA");
     }
 
-    public static boolean setLoggerConsoleHandler(Logger logger) {
+    static boolean setLoggerConsoleHandler(Logger logger) {
         //удалить все хэндлерсы для логгера
         Handler[] handlers = logger.getHandlers();
         for (Handler handler : handlers) {
@@ -121,7 +119,7 @@ public class UtilsForAll {
         return true;
     }
 
-    public static boolean setLoggerFileHandler(Logger logger) {
+    private static boolean setLoggerFileHandler(Logger logger) {
         //удалить все хэндлерсы для логгера
         Handler[] handlers = logger.getHandlers();
         for (Handler handler : handlers) {
@@ -155,21 +153,5 @@ public class UtilsForAll {
             return false;
         }
         return true;
-    }
-
-    public static String getStringInCp1251(String strUTF8) {
-        byte[] byteBuff = new byte[0];
-        try {
-            byteBuff = strUTF8.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String str1251 = null;
-        try {
-            str1251 = new String(byteBuff, "Cp1251");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return str1251;
     }
 }
