@@ -11,6 +11,8 @@ public class ConstantForAll {
     //режимы работы программы через аргументы запуска
     public static String ARG_ADDRESS = "-adr";
 
+    public static String RES_PAGE_CONTENT = "/res/page/content.html";
+
     //контент
     public static final String urlAdminPass = "http://adminpass/";
     public static final String urlContent = "http://www.online-life.cc/1327-zvezdnyy-put-1966-1969.html";

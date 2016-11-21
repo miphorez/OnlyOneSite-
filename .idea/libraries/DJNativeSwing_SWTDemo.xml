@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="DJNativeSwing-SWTDemo">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/DJNativeSwing-SWTDemo.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/DJNativeSwing-SWTDemo.jar!/src" />
+    </SOURCES>
+  </library>
+</component>

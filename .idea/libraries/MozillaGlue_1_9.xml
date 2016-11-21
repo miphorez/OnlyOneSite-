@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MozillaGlue-1.9">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/MozillaGlue-1.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
