@@ -28,14 +28,19 @@ public class UtilsForAll {
         }
     }
 
-    public static void setSwingForShowGUI(JFrame frame) {
+    public static boolean setLookAndFeelForWindows() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
         } catch (ClassNotFoundException | InstantiationException |
                 IllegalAccessException | UnsupportedLookAndFeelException e) {
-            JOptionPane.showMessageDialog(frame, "e.getMessage()");
+            JOptionPane.showMessageDialog(null, "Ошибка setLookAndFeel: " + LS + e.getMessage());
+            return false;
         }
+        return true;
+    }
 
+    public static void setSwingForShowGUI(JFrame frame) {
+        if (!setLookAndFeelForWindows()) return;
         //контролируем кнопку выхода из программы
         frame.addWindowListener(new WindowAdapter() {
             @Override

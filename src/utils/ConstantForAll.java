@@ -2,7 +2,7 @@ package utils;
 
 public class ConstantForAll {
     public static String PROGRAM_TITLE = "Only One Site";
-    public static String PROGRAM_VERSION = "1.0.0";
+    public static String PROGRAM_VERSION = "1.1.0";
     public static final String LS = System.getProperty("line.separator");
 
     //логгер
