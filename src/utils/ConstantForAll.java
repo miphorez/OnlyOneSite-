@@ -11,8 +11,6 @@ public class ConstantForAll {
     //режимы работы программы через аргументы запуска
     public static String ARG_ADDRESS = "-adr";
 
-    public static String RES_PAGE_CONTENT = "/res/page/content.html";
-
     //контент
     public static final String urlAdminPass = "http://adminpass/";
     public static final String urlContent = "http://www.online-life.cc/1327-zvezdnyy-put-1966-1969.html";
@@ -25,9 +23,14 @@ public class ConstantForAll {
     //логгер
     public static String LOG_FILENAME = "OnlyOneSite.log";
 
+    //настройки
+    public static String NODE_ROOT = "ProgramSettings";
+    public static String NODE_CONTENT = "ItemContent";
+
     //файлы программы
     public static String FILE_HTML_CONTENT = "content.html";
     public static String FILE_XML_PARAMS = "OOSParams.xml";
+    public static String FILE_XML_PARAMS_TEMP = "temp.xml";
 
     //директория программы
     public static String DIRECTORY_USER_PROG = "OnlyOneSite";

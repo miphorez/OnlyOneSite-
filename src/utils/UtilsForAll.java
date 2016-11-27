@@ -1,7 +1,8 @@
 package utils;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import xml.XMLProgramSettings;
+import org.apache.commons.io.FileUtils;
+import xml.XMLSettingsUtils;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -9,11 +10,15 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.logging.*;
 
+import static netscape.security.PrivilegeManager.TEMP_FILENAME;
 import static utils.ConstantForAll.*;
 
 public class UtilsForAll {
@@ -79,13 +84,13 @@ public class UtilsForAll {
         //log выводится только в консоль
 //        utils.UtilsForAll.setLoggerConsoleHandler(logger);
 
-        XMLProgramSettings xmlProgramSettings = new XMLProgramSettings(logger);
-        if (!xmlProgramSettings.isXMLSettingsFile()){
+        XMLSettingsUtils xmlSettingsUtils = new XMLSettingsUtils(logger);
+        if (!xmlSettingsUtils.isFileExists()){
             System.out.println("Ошибка файла настроек программы");
             return null;
         }
 
-        if (xmlProgramSettings.isLogInSettings()){
+        if (xmlSettingsUtils.isLogON()){
             logger.setLevel(Level.INFO);
         } else logger.setLevel(Level.OFF);
 
@@ -113,6 +118,21 @@ public class UtilsForAll {
         String strFileName = fileParams.getAbsolutePath();
         strFileName += "\\" + FILE_XML_PARAMS;
         return strFileName;
+    }
+
+    public static String getFileNameTemp() {
+        return getTempDir() + "/" + TEMP_FILENAME;
+    }
+
+    public static File getTempDir() {
+        return UtilsForAll.getTempDirectory(DIRECTORY_USER_PROG);
+    }
+
+    public static File getTempDirectory(String strDirName) {
+        final File dirTemp = new File(FileUtils.getTempDirectory().getAbsolutePath() + "/" + strDirName);
+        if (Files.exists(Paths.get(dirTemp.toURI()), LinkOption.NOFOLLOW_LINKS)) return dirTemp;
+        dirTemp.mkdir();
+        return dirTemp;
     }
 
     public static String getFileNameHTMLContent() {
@@ -210,5 +230,41 @@ public class UtilsForAll {
             return false;
         }
         return true;
+    }
+
+    public static String strToXorHexData(String str){
+        String XOR_BinaryData = "sdaswan";
+        String result = "";
+        byte[] xorArr = XOR_BinaryData.getBytes();
+        byte[] strArr = str.getBytes();
+        int ii = 0;
+        for (int i = 0; i < str.length(); i++) {
+            byte b = (byte) (strArr[i] ^ xorArr[ii]);
+            String hex = Integer.toHexString(b);
+            if (hex.length() == 1) hex = "0" + hex;
+            result += hex;
+            ii++;
+            if (ii == (XOR_BinaryData.length())) ii=0;
+        }
+        return result;
+    }
+
+    public static String xorHexDataToStr(String str){
+        String XOR_BinaryData = "sdaswan";
+        String result = "";
+        String iStr = str;
+        byte[] xorArr = XOR_BinaryData.getBytes();
+        int ii = 0;
+        while (iStr.length() > 0){
+            String hs = iStr.substring(0,2);
+            byte b = (byte) Integer.parseInt(hs, 16);
+            b = (byte) (b ^ xorArr[ii]);
+            char ch = (char)(b&0x00FF);
+            result = result + String.valueOf(ch);
+            ii++;
+            if (ii == (XOR_BinaryData.length())) ii=0;
+            iStr = iStr.substring(2);
+        }
+        return result;
     }
 }

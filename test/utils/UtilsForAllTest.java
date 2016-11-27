@@ -15,19 +15,6 @@ import static utils.ConstantForAll.*;
 
 public class UtilsForAllTest {
 
-    @Test
-    public void strResTest() throws Exception {
-        String str = "c:\\Source\\-=Java=-\\OnlyOneSite\\src\\res\\page\\page1.html";
-        URL resURL = utils.UtilsForAll.getMainClass().getResource(RES_PAGE_CONTENT);
-        System.out.println(resURL.toString());
-        System.out.println(resURL.getPath());
-        System.out.println(resURL.getFile());
-        System.out.println(utils.UtilsForAll.getMainClass().getResource(RES_PAGE_CONTENT).toURI().getPath());
-//        System.out.println(utils.UtilsForAll.getMainClass().getResource(str));
-
-//        System.out.println(utils.UtilsForAll.getMainClass().getResource("/res/page/page1.html").getFile());
-//        System.out.println(utils.UtilsForAll.getMainClass().getResource("/res/page/page1.html").getPath());
-    }
 
     @Test
     public void exampleJSoupTest() throws Exception {
