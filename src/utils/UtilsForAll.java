@@ -86,7 +86,7 @@ public class UtilsForAll {
 
         XMLSettingsUtils xmlSettingsUtils = new XMLSettingsUtils(logger);
         if (!xmlSettingsUtils.isFileExists()){
-            System.out.println("Ошибка файла настроек программы");
+            logger.info("Ошибка файла настроек программы");
             return null;
         }
 

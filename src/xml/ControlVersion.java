@@ -11,7 +11,8 @@ class ControlVersion extends XMLSettings{
     }
 
     boolean go() {
-        TVersion tVersion = new TVersion(getAttr(null, "Ver", false));
+        String strVer = getAttr(null, "Ver", false);
+        TVersion tVersion = new TVersion(strVer);
         logger.info("Версия файла настроек: " + tVersion.getStrValueVer());
         if (tVersion.isEqVerLo(ConstantForAll.PROGRAM_VERSION)) {
             logger.info("Ошибка! Версия программы ниже, чем версия файла настроек");

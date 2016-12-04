@@ -3,9 +3,11 @@ package xml.preset;
 import java.util.Objects;
 
 public enum ETContent {
-    ONLINE_LIFE,
-    HTML_LINK,
-    DOMEN_LINK,
+    LINK_NONE,
+
+    LINK_ONLINELIFE,
+    LINK_HTML,
+    LINK_DOMAIN,
     ;
 
     public static ETContent getByStrType(String type) {

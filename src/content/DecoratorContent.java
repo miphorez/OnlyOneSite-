@@ -1,6 +1,9 @@
 package content;
 
 import chrriis.dj.nativeswing.swtimpl.components.*;
+import content.messenger.Messenger;
+import xml.LoaderContent;
+import xml.preset.TContent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,23 +12,26 @@ import java.util.logging.Logger;
 
 import static utils.ConstantForAll.*;
 
-public class DecoratorContent {
-    private static boolean flAdmin = false;
-    private static Logger logger;
-    private static JWebBrowser webBrowser;
-    private static JPanel webBrowserPanel;
-    private static String strNewResource;
-    private static BookmarkContent bookmarkContent;
+public abstract class DecoratorContent {
+    boolean flAdmin = false;
+    Logger logger;
+    JWebBrowser webBrowser;
+    private JPanel webBrowserPanel;
+    String strNewResource;
+    Content_ONLINELIFE.BookmarkContent bookmarkContent;
+    private TContent tContent;
+    private Messenger messenger;
 
-    public DecoratorContent(Logger logger) {
-        DecoratorContent.logger = logger;
+    DecoratorContent(Logger logger, TContent tContent, Messenger messenger) {
+        this.logger = logger;
+        this.tContent = tContent;
+        this.messenger = messenger;
     }
 
-    public static JComponent createContent() {
-        logger.info("логгер запущен");
+    public JComponent createContent() {
         JPanel contentPane = new JPanel(new BorderLayout());
         webBrowserPanel = new JPanel(new BorderLayout());
-        webBrowserPanel.setBorder(BorderFactory.createTitledBorder(GLOBAL_CONTENT));
+        webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName()));
 
         webBrowser = new JWebBrowser() {
             @Override
@@ -39,79 +45,32 @@ public class DecoratorContent {
         webBrowser.setStatusBarVisible(true);
         webBrowser.setButtonBarVisible(true);
 
-        webBrowser.navigate(urlBookmarks);
+        webBrowser.navigate(tContent.getLink());
         webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
         contentPane.add(webBrowserPanel, BorderLayout.CENTER);
 
-        webBrowser.addWebBrowserListener(new WebBrowserAdapter() {
-            @Override
-            public void locationChanging(WebBrowserNavigationEvent e) {
-                strNewResource = e.getNewResourceLocation();
-                if (checkAdminMode()) {
-                    webBrowser.navigate(urlBookmarks);
-                    return;
-                }
-                if (!isContentLegal()) {
-                    logger.info("запрещена ссылка: " + strNewResource);
-                    if (!flAdmin) e.consume();
-                } else {
-                    logger.info("разрешена ссылка: " + strNewResource);
-                }
-            }
-
-            @Override
-            public void windowWillOpen(WebBrowserWindowWillOpenEvent e) {
-                e.getNewWebBrowser().addWebBrowserListener(new WebBrowserAdapter() {
-                    @Override
-                    public void locationChanging(WebBrowserNavigationEvent e) {
-                        final JWebBrowser webBrowser = e.getWebBrowser();
-                        webBrowser.removeWebBrowserListener(this);
-                        e.consume();
-                        SwingUtilities.invokeLater(() -> webBrowser.getWebBrowserWindow().dispose());
-                    }
-                });
-            }
-
-            @Override
-            public void locationChanged(WebBrowserNavigationEvent e) {
-                super.locationChanged(e);
-                final String strLocation = e.getNewResourceLocation();
-                logger.info("загружена ссылка: " + strLocation);
-                if (strLocation.indexOf(urlBookmarks, 0) != -1) {
-                    String htmlSource = webBrowser.getHTMLContent();
-                    bookmarkContent = new BookmarkContent(logger, htmlSource);
-                    bookmarkContent.typeList();
-                }
-            }
-        });
+        itemContent();
         return contentPane;
     }
 
-    private static boolean checkAdminMode() {
+    public abstract void itemContent();
+
+    abstract boolean isContentLegal();
+
+    boolean checkAdminMode() {
         if (Objects.equals(strNewResource, urlAdminPass)) {
             flAdmin = !flAdmin;
             if (flAdmin) {
-                webBrowserPanel.setBorder(BorderFactory.createTitledBorder(GLOBAL_CONTENT + " [admin mode]"));
+                webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [admin mode]"));
             } else {
-                webBrowserPanel.setBorder(BorderFactory.createTitledBorder(GLOBAL_CONTENT));
+                webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName()));
             }
             return true;
         }
         return false;
     }
 
-    private static boolean isContentLegal() {
-        return (strNewResource.indexOf("http://tredman.com", 0) != -1) ||
-                (strNewResource.indexOf("dterod.com", 0) != -1) ||
-                (strNewResource.indexOf(FILE_HTML_CONTENT, 0) != -1) ||
-                (strNewResource.indexOf(urlBookmarks, 0) == 0) ||
-                ((strNewResource.indexOf(urlMain, 0) == 0) && (strNewResource.length() == urlMain.length())) ||
-                (strNewResource.indexOf(urlLogOut, 0) != -1) ||
-                (strNewResource.indexOf(urlFavoritesOut, 0) != -1) ||
-                bookmarkContent.isResourseInListLegalURL(strNewResource);
-    }
-
-    private static WebBrowserDecorator createCustomWebBrowserDecorator(JWebBrowser webBrowser, Component renderingComponent) {
+    private WebBrowserDecorator createCustomWebBrowserDecorator(JWebBrowser webBrowser, Component renderingComponent) {
         return new DefaultWebBrowserDecorator(webBrowser, renderingComponent) {
             @Override
             protected void addMenuBarComponents(WebBrowserMenuBar menuBar) {
@@ -129,7 +88,9 @@ public class DecoratorContent {
                 buttonBar.add(buttonBar.getReloadButton());
                 buttonBar.add(buttonBar.getStopButton());
                 final JButton btnContent = new JButton("[Содержание]");
-                btnContent.addActionListener(e -> JOptionPane.showMessageDialog(btnContent, "[Содержание]"));
+                btnContent.addActionListener(e ->
+                        LoaderContent.getInstance(logger, messenger).selectItemContent()
+                );
                 buttonBar.add(btnContent);
                 final JButton btnAddContent = new JButton("[Добавить]");
                 btnAddContent.addActionListener(e -> JOptionPane.showMessageDialog(btnAddContent, "[Добавить]"));
@@ -140,4 +101,9 @@ public class DecoratorContent {
             }
         };
     }
+
+    public TContent getTContent() {
+        return tContent;
+    }
+
 }

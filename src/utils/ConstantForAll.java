@@ -2,7 +2,7 @@ package utils;
 
 public class ConstantForAll {
     public static String PROGRAM_TITLE = "Only One Site";
-    public static String PROGRAM_VERSION = "1.1.0";
+    public static String PROGRAM_VERSION = "1.1.1";
     public static final String LS = System.getProperty("line.separator");
 
     //логгер
@@ -13,11 +13,6 @@ public class ConstantForAll {
 
     //контент
     public static final String urlAdminPass = "http://adminpass/";
-    public static final String urlContent = "http://www.online-life.cc/1327-zvezdnyy-put-1966-1969.html";
-    public static final String urlBookmarks = "http://www.online-life.cc/favorites/";
-    public static final String urlMain = "http://www.online-life.cc/";
-    public static final String urlLogOut = "http://www.online-life.cc/index.php?action=logout";
-    public static final String urlFavoritesOut = "http://www.online-life.cc/index.php?do=favorites&amp;doaction=del";
     public static final String urlHTMLContent = "C:\\ProgramData\\OnlyOneSite\\content.html";
 
     //логгер
@@ -37,4 +32,9 @@ public class ConstantForAll {
     public static String DIRECTORY_USER_PROG_SET = "OnlyOneSite\\Settings";
     public static String DIRECTORY_USER_PROG_LOG = "OnlyOneSite\\Log";
 
+    //изображения
+    public static String OOS_PNG_16 = "/res/img/oos_16.png";
+    public static String OOS_PNG_32 = "/res/img/oos_32.png";
+    public static String OOS_PNG_48 = "/res/img/oos_48.png";
+    public static String OOS_PNG_64 = "/res/img/oos_64.png";
 }

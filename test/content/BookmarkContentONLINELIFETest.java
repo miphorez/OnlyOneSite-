@@ -6,15 +6,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
-import static utils.ConstantForAll.urlBookmarks;
-import static utils.ConstantForAll.urlContent;
-import static utils.UtilsForAll.getFileNameHTMLContent;
+import static utils.ConstantForAll.*;
 
-public class BookmarkContentTest {
+public class BookmarkContentONLINELIFETest {
 
 
     @Test

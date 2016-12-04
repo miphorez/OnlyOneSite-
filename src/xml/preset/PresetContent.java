@@ -2,8 +2,6 @@ package xml.preset;
 
 import java.util.ArrayList;
 
-import static utils.ConstantForAll.urlBookmarks;
-
 public class PresetContent {
     private ArrayList<TContent> listPresetContent = new ArrayList<>();
 
@@ -13,19 +11,19 @@ public class PresetContent {
 
     private void createListPresetContent() {
         listPresetContent.add(new TContent(
-                "https://ru.wikipedia.org",
+                "https://ru.wikipedia.org/",
                 "wikipedia",
-                ETContent.DOMEN_LINK,
+                ETContent.LINK_DOMAIN,
                 false));
         listPresetContent.add(new TContent(
-                "https://translate.google.com",
+                "https://translate.google.com/",
                 "translate.google",
-                ETContent.HTML_LINK,
+                ETContent.LINK_HTML,
                 false));
         listPresetContent.add(new TContent(
-                urlBookmarks,
+                "http://www.online-life.cc/favorites/",
                 "www.online-life.cc",
-                ETContent.ONLINE_LIFE,
+                ETContent.LINK_ONLINELIFE,
                 false));
     }
 

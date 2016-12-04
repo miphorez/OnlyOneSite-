@@ -35,7 +35,7 @@ public class UtilsForAllTest {
         Logger logger = Logger.getLogger("test");
         if (!utils.UtilsForAll.setLoggerConsoleHandler(logger)) assertTrue(false);
         logger.info("логгер запущен");
-        Document doc = Jsoup.connect(urlContent).get();
+//        Document doc = Jsoup.connect(urlContent).get();
 //        System.out.println(doc.toString());
 //        assertTrue(saveContent(logger, doc.toString(), getFileNameHTMLContent()));
     }

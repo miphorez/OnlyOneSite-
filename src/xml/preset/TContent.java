@@ -1,5 +1,6 @@
 package xml.preset;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static utils.UtilsForAll.xorHexDataToStr;
@@ -24,6 +25,13 @@ public class TContent {
         this.modeDel = Objects.equals(modeDel, "1");
     }
 
+    public TContent(String link, String name, String type) {
+        this.link = (link);
+        this.name = (name);
+        this.type = ETContent.getByStrType(type);
+        this.modeDel = false;
+    }
+
     public String getLink() {
         return link;
     }
@@ -43,5 +51,12 @@ public class TContent {
     @Override
     public String toString() {
         return name +" | "+ link  +" | "+ type.name() +" | "+ modeDel;
+    }
+
+    public static TContent getTContentByName(ArrayList<TContent> listTContent, String strName) {
+        for (TContent tContent: listTContent) {
+            if(Objects.equals(tContent.getName(), strName)) return tContent;
+        }
+        return null;
     }
 }
