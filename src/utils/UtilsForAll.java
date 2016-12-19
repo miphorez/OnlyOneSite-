@@ -1,22 +1,29 @@
 package utils;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import net.sf.image4j.codec.ico.ICODecoder;
 import org.apache.commons.io.FileUtils;
 import xml.XMLSettingsUtils;
+import net.sf.image4j.codec.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.*;
 import java.util.logging.*;
+import java.util.logging.Formatter;
+import java.util.prefs.Preferences;
 
 import static netscape.security.PrivilegeManager.TEMP_FILENAME;
 import static utils.ConstantForAll.*;
@@ -266,5 +273,28 @@ public class UtilsForAll {
             iStr = iStr.substring(2);
         }
         return result;
+    }
+
+    public static void setCustomIconForProgram(JFrame frame) {
+        String MAIN_WINDOW_ICON = "/res/img/oos.ico";
+        URL resURL = utils.UtilsForAll.getMainClass().getResource(MAIN_WINDOW_ICON);
+        java.util.List<BufferedImage> images = null;
+        try {
+            try {
+                images = ICODecoder.read(new File(resURL.toURI().getPath()));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        frame.setIconImages(images);
+    }
+
+    public static String getPrefString(String prefName, String presetStr) {
+        Preferences prefs = Preferences.userRoot();
+        String iStr = prefs.get(prefName, presetStr);
+        if (Objects.equals(iStr, "")) iStr = presetStr;
+        return iStr;
     }
 }

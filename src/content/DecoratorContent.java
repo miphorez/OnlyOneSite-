@@ -2,15 +2,20 @@ package content;
 
 import chrriis.dj.nativeswing.swtimpl.components.*;
 import content.messenger.Messenger;
+import frm.about.FrmAboutAndVersion;
+import frm.password.FrmPassword;
 import xml.LoaderContent;
 import xml.preset.TContent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 import static utils.ConstantForAll.*;
+import static utils.UtilsForAll.setCustomIconForProgram;
 
 public abstract class DecoratorContent {
     boolean flAdmin = false;
@@ -81,6 +86,7 @@ public abstract class DecoratorContent {
                 myMenu.add(new JMenuItem("Удалить ссылку"));
                 menuBar.add(myMenu);
             }
+
             @Override
             protected void addButtonBarComponents(WebBrowserButtonBar buttonBar) {
                 buttonBar.add(buttonBar.getBackButton());
@@ -93,13 +99,29 @@ public abstract class DecoratorContent {
                 );
                 buttonBar.add(btnContent);
                 final JButton btnAddContent = new JButton("[Добавить]");
-                btnAddContent.addActionListener(e -> JOptionPane.showMessageDialog(btnAddContent, "[Добавить]"));
+                btnAddContent.addActionListener(e ->
+                        showAddContent()
+                );
                 buttonBar.add(btnAddContent);
                 final JButton btnDelContent = new JButton("[Удалить]");
                 btnDelContent.addActionListener(e -> JOptionPane.showMessageDialog(btnDelContent, "[Удалить]"));
                 buttonBar.add(btnDelContent);
+                final JButton btnAbout = new JButton("[О программе]");
+                btnAbout.addActionListener(e ->
+                        showFrmAbout()
+                );
+                buttonBar.add(btnAbout);
             }
         };
+    }
+
+    private void showAddContent() {
+        new FrmPassword();
+
+    }
+
+    private void showFrmAbout() {
+        new FrmAboutAndVersion();
     }
 
     public TContent getTContent() {

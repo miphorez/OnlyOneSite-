@@ -12,6 +12,8 @@ public class PrefParam {
     public static int widthMainWindow;     //ширина окна программы
     public static int hightMainWindow;     //высота окна программы
 
+    public static final String PREF_Password = "PassDev";
+    public static String PRESET_Password = "12345";
 
     public PrefParam(JFrame frame) {
         frameMain = frame;

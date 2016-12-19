@@ -1,0 +1,46 @@
+<html>
+ <head>
+  <meta charset="cp1251">
+  <title>font-family</title>
+  <style>
+   h1 {
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+   }
+   p {
+    font-family: Tahoma, Georgia, 'Times New Roman', Times, serif;
+    font-size: 13pt;
+   }
+   h2 {
+    font-family: Tahoma, Georgia, 'Times New Roman', Times, serif;
+    font-size: 13pt;
+    font-style: strong;
+   }
+   h3 {
+    font-family: Tahoma, Georgia, 'Times New Roman', Times, serif;
+    font-size: 13pt;
+    font-style: italic;
+   }
+div {
+    border: 0px solid black; /* Параметры рамки */
+    padding: 3px; /* Поля вокруг текста */
+    margin-bottom: 0px; /* Отступ снизу */
+   }
+   #left { text-align: left; }
+   #right { text-align: right; }
+   #center { text-align: center; }
+   #justify { text-align: justify; }
+   .content {
+    width: 75%; /* Ширина слоя */
+    background: #fc0; /* Цвет фона */
+   }  </style>
+ </head>
+ <body><div id="left">
+<p><b><u> v1.1.1 </b></u><br>
+• Информация о программе и история версий выводится во всплывающем окне по кнопке <b>"О программе"</b><br>
+</p>
+<p><b><u> v1.0.0 </b></u><br>
+• Релиз программы
+</p>
+</div>
+ </body>
+</html>

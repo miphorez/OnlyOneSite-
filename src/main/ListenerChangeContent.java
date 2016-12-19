@@ -35,6 +35,7 @@ public class ListenerChangeContent extends ListenerFromContent implements Observ
     }
 
     private void execChangeContent(TContent tContent) {
+        frame.getContentPane().removeAll();
         switch (tContent.getType()) {
             case LINK_HTML:
                 Content_HTML contentHtml = new Content_HTML(logger, tContent, messenger);
