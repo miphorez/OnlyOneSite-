@@ -1,36 +1,42 @@
 package frm.password.sbs;
 
+import frm.gui.CreatePasswordField;
+import frm.password.FrmPassword;
+
 import java.util.logging.Logger;
 
 public class StepByStep {
 
-    public StateSBS sbsInputOldPassword;        //ввод старого пароля
-    public StateSBS sbsOkInputOldPassword;      //успешный ввод старого пароля
-    public StateSBS sbsErrInputOldPassword;     //ошибка ввода старого пароля
-    public StateSBS sbsInputNewPassword;        //ввод нового пароля
-    public StateSBS sbsErrInputNewPassword;     //ошибка ввода нового пароля
-    public StateSBS sbsConfirmNewPassword;      //подтверждение нового пароля
-    public StateSBS sbsErrConfirmNewPassword;   //ошибка подтверждения нового пароля
-    public StateSBS sbsOkNewPassword;           //успешный ввод нового пароля
-    StateSBS stateSBS;
+    StateSBS sbsInputOldPassword;        //ввод старого пароля
+    StateSBS sbsOkInputOldPassword;      //успешный ввод старого пароля
+    StateSBS sbsErrInputPassword;        //ошибка ввода пароля
+    StateSBS sbsInputNewPassword;        //ввод нового пароля
+    StateSBS sbsConfirmNewPassword;      //подтверждение нового пароля
+    StateSBS sbsOkNewPassword;           //успешный ввод нового пароля
+    public StateSBS sbsChangePassword;   //изменить пароль
+    StateSBS sbsEscape;                  //сброс ввода пароля
+    private StateSBS stateSBS;
 
-    Logger logger;
+    private Logger logger;
+    private FrmPassword frmPassword;
+    private boolean flOk;
+    private boolean flChangePassword;
 
-    public StepByStep(Logger log) {
+    public StepByStep(Logger log, FrmPassword frmPassword) {
         logger = log;
+        this.frmPassword = frmPassword;
         logger.info("StepByStep Password: start");
         sbsInputOldPassword = new SBSInputOldPassword(this);
         sbsOkInputOldPassword = new SBSOkInputOldPassword(this);
-        sbsErrInputOldPassword = new SBSErrInputOldPassword(this);
+        sbsErrInputPassword = new SBSErrInputPassword(this);
         sbsInputNewPassword = new SBSInputNewPassword(this);
-        sbsErrInputNewPassword = new SBSErrInputNewPassword(this);
         sbsConfirmNewPassword = new SBSConfirmNewPassword(this);
-        sbsErrConfirmNewPassword = new SBSErrConfirmNewPassword(this);
         sbsOkNewPassword = new SBSOkNewPassword(this);
+        sbsChangePassword = new SBSChangePassword(this);
+        sbsEscape = new SBSEscape(this);
     }
 
     public void goStart(){
-        logger.info("");
         stateSBS = sbsInputOldPassword;
         goState();
     }
@@ -46,5 +52,46 @@ public class StepByStep {
 
     public Logger getLogger() {
         return logger;
+    }
+
+    void setToFormStrStatus(String strStatus) {
+        frmPassword.setTextToStatus(strStatus);
+    }
+
+    void setToFormStrLabel(String strLabel) {
+        frmPassword.setTextToLabelPassword(strLabel);
+    }
+
+    CreatePasswordField getPfPassword() {
+        return frmPassword.getPfPassword();
+    }
+
+    void setFocusOnPasswordField() {
+        frmPassword.getPfPassword().requestFocus();
+    }
+
+    boolean isVisibleFrm() {
+        return frmPassword.isFlVisibleFrm();
+    }
+
+    void setOk() {
+        flOk = true;
+    }
+
+    public boolean isFlOk() {
+        return flOk;
+    }
+
+    void setFlChangePassword(boolean setYesNo) {
+        flChangePassword = setYesNo;
+        frmPassword.getPfPassword().setText("");
+    }
+
+    boolean isChangePassword() {
+        return flChangePassword;
+    }
+
+    public StateSBS getStateSBS() {
+        return stateSBS;
     }
 }

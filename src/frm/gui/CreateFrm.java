@@ -14,16 +14,19 @@ public class CreateFrm extends JFrame {
     private JPanel jpMain;
     private JPanel jpMainBorder;
     private JPanel jpContainerMain;
+    private boolean flVisibleFrm;
 
     public CreateFrm(){
         setCustomIconForProgram(this);
         setTitle(PROGRAM_TITLE + " (v" + PROGRAM_VERSION + ")");
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        flVisibleFrm = true;
 
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 setVisible(false);
+                flVisibleFrm = false;
             }
         });
 
@@ -45,11 +48,19 @@ public class CreateFrm extends JFrame {
         return jpContainerMain;
     }
 
-    public void viewModalFrm(int hightFrm, int widthFrm) {
+    public void viewModalFrm(int hightFrm, int widthFrm, boolean modeVisible) {
         pack();
         setBounds(0, 0, hightFrm, widthFrm);
         setLocationRelativeTo(null);
         setAlwaysOnTop(true);
-        setVisible(true);
+        setVisible(modeVisible);
+    }
+
+    public boolean isFlVisibleFrm() {
+        return flVisibleFrm;
+    }
+
+    public void setFlVisibleFrm(boolean flVisibleFrm) {
+        this.flVisibleFrm = flVisibleFrm;
     }
 }

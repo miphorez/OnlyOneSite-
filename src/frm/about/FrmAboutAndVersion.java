@@ -35,7 +35,7 @@ public class FrmAboutAndVersion extends CreateFrm{
         getJpContainerMain().add(getJpMain());
 
         setViewItemParam();
-        viewModalFrm(400, 600);
+        viewModalFrm(400, 600, true);
     }
 
     private void setViewItemParam() {

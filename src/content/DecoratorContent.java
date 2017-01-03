@@ -9,16 +9,10 @@ import xml.preset.TContent;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Objects;
 import java.util.logging.Logger;
 
-import static utils.ConstantForAll.*;
-import static utils.UtilsForAll.setCustomIconForProgram;
-
 public abstract class DecoratorContent {
-    boolean flAdmin = false;
+    private boolean flAdmin = false;
     Logger logger;
     JWebBrowser webBrowser;
     private JPanel webBrowserPanel;
@@ -26,11 +20,23 @@ public abstract class DecoratorContent {
     Content_ONLINELIFE.BookmarkContent bookmarkContent;
     private TContent tContent;
     private Messenger messenger;
+    private FrmPassword frmPassword;
 
     DecoratorContent(Logger logger, TContent tContent, Messenger messenger) {
         this.logger = logger;
         this.tContent = tContent;
         this.messenger = messenger;
+        frmPassword = new FrmPassword(logger);
+
+        new Thread(() -> {
+            while (true){
+                Thread.yield();
+                if (flAdmin != frmPassword.getResult()) {
+                    flAdmin = frmPassword.getResult();
+                    showAdminMode();
+                }
+            }
+        }).start();
     }
 
     public JComponent createContent() {
@@ -44,7 +50,6 @@ public abstract class DecoratorContent {
                 return createCustomWebBrowserDecorator(this, renderingComponent);
             }
         };
-        webBrowser.setBarsVisible(false);
         webBrowser.setMenuBarVisible(false);
         webBrowser.setLocationBarVisible(false);
         webBrowser.setStatusBarVisible(true);
@@ -62,17 +67,8 @@ public abstract class DecoratorContent {
 
     abstract boolean isContentLegal();
 
-    boolean checkAdminMode() {
-        if (Objects.equals(strNewResource, urlAdminPass)) {
-            flAdmin = !flAdmin;
-            if (flAdmin) {
-                webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [admin mode]"));
-            } else {
-                webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName()));
-            }
-            return true;
-        }
-        return false;
+    boolean isAdminMode() {
+        return flAdmin;
     }
 
     private WebBrowserDecorator createCustomWebBrowserDecorator(JWebBrowser webBrowser, Component renderingComponent) {
@@ -81,7 +77,6 @@ public abstract class DecoratorContent {
             protected void addMenuBarComponents(WebBrowserMenuBar menuBar) {
                 super.addMenuBarComponents(menuBar);
                 JMenu myMenu = new JMenu("Содержание");
-                myMenu.add(new JMenuItem("Показать список"));
                 myMenu.add(new JMenuItem("Добавить ссылку"));
                 myMenu.add(new JMenuItem("Удалить ссылку"));
                 menuBar.add(myMenu);
@@ -100,12 +95,9 @@ public abstract class DecoratorContent {
                 buttonBar.add(btnContent);
                 final JButton btnAddContent = new JButton("[Добавить]");
                 btnAddContent.addActionListener(e ->
-                        showAddContent()
+                        showAccessToAdminMode()
                 );
                 buttonBar.add(btnAddContent);
-                final JButton btnDelContent = new JButton("[Удалить]");
-                btnDelContent.addActionListener(e -> JOptionPane.showMessageDialog(btnDelContent, "[Удалить]"));
-                buttonBar.add(btnDelContent);
                 final JButton btnAbout = new JButton("[О программе]");
                 btnAbout.addActionListener(e ->
                         showFrmAbout()
@@ -115,9 +107,28 @@ public abstract class DecoratorContent {
         };
     }
 
-    private void showAddContent() {
-        new FrmPassword();
+    private void showAccessToAdminMode() {
+        switchOverAdminMode();
+    }
 
+    private void showAdminMode() {
+        if (flAdmin) {
+            webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [admin mode]"));
+            webBrowser.setMenuBarVisible(true);
+        }else {
+            webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName()));
+            webBrowser.setMenuBarVisible(false);
+            webBrowser.setLocationBarVisible(false);
+        }
+    }
+
+    private void switchOverAdminMode(){
+        frmPassword.go();
+        new Thread(() -> {
+            while (frmPassword.isFlVisibleFrm()){
+                Thread.yield();
+            }
+        }).start();
     }
 
     private void showFrmAbout() {

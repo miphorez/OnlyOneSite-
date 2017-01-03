@@ -2,21 +2,13 @@ package utils;
 
 public class ConstantForAll {
     public static String PROGRAM_TITLE = "Only One Site";
-    public static String PROGRAM_VERSION = "1.1.1";
+    public static String PROGRAM_VERSION = "1.1.2";
+    static final String MODULE_SIGN = "OnlyOneSite";
+
     public static final String LS = System.getProperty("line.separator");
 
     //логгер
-    public static String GLOBAL_CONTENT = " www.online-life.cc ";
-
-    //режимы работы программы через аргументы запуска
-    public static String ARG_ADDRESS = "-adr";
-
-    //контент
-    public static final String urlAdminPass = "http://adminpass/";
-    public static final String urlHTMLContent = "C:\\ProgramData\\OnlyOneSite\\content.html";
-
-    //логгер
-    public static String LOG_FILENAME = "OnlyOneSite.log";
+    static String LOG_FILENAME = MODULE_SIGN + ".log";
 
     //настройки
     public static String NODE_ROOT = "ProgramSettings";
@@ -24,13 +16,13 @@ public class ConstantForAll {
 
     //файлы программы
     public static String FILE_HTML_CONTENT = "content.html";
-    public static String FILE_XML_PARAMS = "OOSParams.xml";
+    public static String FILE_XML_PARAMS = MODULE_SIGN + ".xml";
     public static String FILE_XML_PARAMS_TEMP = "temp.xml";
 
     //директория программы
-    public static String DIRECTORY_USER_PROG = "OnlyOneSite";
-    public static String DIRECTORY_USER_PROG_SET = "OnlyOneSite\\Settings";
-    public static String DIRECTORY_USER_PROG_LOG = "OnlyOneSite\\Log";
+    public static String DIRECTORY_PROGRAMDATA = MODULE_SIGN;
+    public static String DIRECTORY_PROGRAMDATA_SET = MODULE_SIGN + "\\Settings";
+    public static String DIRECTORY_PROGRAMDATA_LOG = MODULE_SIGN + "\\Log";
 
     //изображения
     public static String OOS_PNG_16 = "/res/img/oos_16.png";

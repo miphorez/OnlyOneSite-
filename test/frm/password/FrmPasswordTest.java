@@ -13,7 +13,12 @@ public class FrmPasswordTest {
         Logger logger = Logger.getLogger("test");
         if (!utils.UtilsForAll.setLoggerConsoleHandler(logger)) assertTrue(false);
         logger.info("логгер запущен");
-        new FrmPassword();
+        FrmPassword frmPassword = new FrmPassword(logger);
+        frmPassword.go();
+        while (frmPassword.isFlVisibleFrm()){
+            Thread.yield();
+        }
+        assertTrue(frmPassword.getResult());
     }
 
 }

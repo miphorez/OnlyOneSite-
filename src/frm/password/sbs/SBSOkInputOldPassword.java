@@ -1,20 +1,23 @@
 package frm.password.sbs;
 
-import java.util.logging.Logger;
+public class SBSOkInputOldPassword extends SBSNoWaitEnter {
 
-public class SBSOkInputOldPassword implements StateSBS {
-    StepByStep stepByStep;
-    Logger logger;
-
-    public SBSOkInputOldPassword(StepByStep stepByStep) {
-        this.stepByStep = stepByStep;
-        logger = this.stepByStep.getLogger();
+    SBSOkInputOldPassword(StepByStep stepByStep) {
+        super(stepByStep);
     }
 
     @Override
     public void goState() {
-        logger.info("->");
-        stepByStep.setStateSBS(stepByStep.sbsErrInputNewPassword);
-        stepByStep.setStateSBS(stepByStep.sbsOkInputOldPassword);
+        if (getStepByStep().isChangePassword()){
+            getLogger().info("-> смена пароля -> старый пароль введён правильно");
+            getStepByStep().setToFormStrLabel("Изменение пароля -> новый пароль");
+            getStepByStep().setToFormStrStatus("введите новый пароль...");
+            getStepByStep().setStateSBS(getStepByStep().sbsInputNewPassword);
+        }else {
+            getLogger().info("-> пароль введён правильно");
+            getStepByStep().setToFormStrLabel("Пароль доступа");
+            getStepByStep().setToFormStrStatus("пароль введён правильно!");
+            getStepByStep().setOk();
+        }
     }
 }

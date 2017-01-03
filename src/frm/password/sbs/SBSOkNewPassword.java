@@ -1,20 +1,28 @@
 package frm.password.sbs;
 
-import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
-public class SBSOkNewPassword implements StateSBS {
-    StepByStep stepByStep;
-    Logger logger;
+import static utils.UtilsForAll.getMD5String;
 
-    public SBSOkNewPassword(StepByStep stepByStep) {
-        this.stepByStep = stepByStep;
-        logger = this.stepByStep.getLogger();
+public class SBSOkNewPassword extends SBSNoWaitEnter {
+
+    SBSOkNewPassword(StepByStep stepByStep) {
+        super(stepByStep);
     }
 
     @Override
     public void goState() {
-        logger.info("->");
-        stepByStep.setStateSBS(stepByStep.sbsErrInputNewPassword);
-        stepByStep.setStateSBS(stepByStep.sbsOkInputOldPassword);
+        getLogger().info("-> смена пароля -> пароль успешно изменен");
+        getStepByStep().setToFormStrLabel("Пароль доступа");
+        getStepByStep().setToFormStrStatus("пароль успешно изменён!");
+        saveNewPassword();
+        getStepByStep().setFlChangePassword(false);
+        getStepByStep().setStateSBS(getStepByStep().sbsInputOldPassword);
     }
+
+    private void saveNewPassword() {
+        String strNewPassword = getMD5String(String.valueOf(getStepByStep().getPfPassword().getPassword()));
+        Preferences.userRoot().put(getStepByStep().getPfPassword().getKeyPref(), strNewPassword);
+    }
+
 }

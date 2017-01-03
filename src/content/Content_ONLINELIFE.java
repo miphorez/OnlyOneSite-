@@ -30,13 +30,10 @@ public class Content_ONLINELIFE extends DecoratorContent {
             @Override
             public void locationChanging(WebBrowserNavigationEvent e) {
                 strNewResource = e.getNewResourceLocation();
-                if (checkAdminMode()) {
-                    webBrowser.navigate(urlBookmarks);
-                    return;
-                }
+                if (isAdminMode()) return;
                 if (!isContentLegal()) {
                     logger.info("запрещена ссылка: " + strNewResource);
-                    if (!flAdmin) e.consume();
+                    e.consume();
                 } else {
                     logger.info("разрешена ссылка: " + strNewResource);
                 }

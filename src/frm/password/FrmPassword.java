@@ -1,16 +1,25 @@
 package frm.password;
 
 import frm.gui.*;
+import frm.password.sbs.StepByStep;
 import utils.PrefParam;
 
 import javax.swing.*;
+import java.util.logging.Logger;
 
-public class FrmPassword  extends CreateFrm{
+public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenger{
     private JLabel lPassword;
     private CreateStatusBar lStatusBar;
+    private Logger logger;
+    private CreateButton btnPassword;
+    private CreatePasswordField pfPassword;
+    private StepByStep stepByStep;
 
-    public FrmPassword() {
+    private InsideListener insideListener;
+
+    public FrmPassword(Logger logger) {
         super();
+        this.logger = logger;
         setResizable(false);
         setTitle("Режим администратора");
 
@@ -30,11 +39,8 @@ public class FrmPassword  extends CreateFrm{
         jpPassword.add(jplPassword);
 
         JPanel jppfPassword = BoxLayoutUtils.createHorizontalPanel();
-        CreatePasswordField pfPassword = new CreatePasswordField(
-                PrefParam.PREF_Password, PrefParam.PRESET_Password,
-                '*', lPassword);
-        JButton btnPassword = new CreateButton(110,18,"Ввести пароль");
-        btnPassword.addActionListener(e -> pfPassword.goControlTextField());
+        pfPassword = new CreatePasswordField(PrefParam.PREF_PASS, '*');
+        btnPassword = new CreateButton(110,18,"Ввести пароль");
         jppfPassword.add(Box.createHorizontalStrut(10));
         jppfPassword.add(pfPassword);
         jppfPassword.add(btnPassword);
@@ -52,8 +58,10 @@ public class FrmPassword  extends CreateFrm{
             else pfPassword.setEchoChar((char) 0);
             chbPassword.setFocusPainted(false);
         });
-        JButton btnChangePassword = new CreateButton(110,18,"Изменить пароль");
-        btnChangePassword.addActionListener(e -> pfPassword.goControlTextField());
+        CreateButton btnChangePassword = new CreateButton(110,18,"Изменить пароль");
+        btnChangePassword.setStyle_Underline();
+        btnChangePassword.addActionListener(e ->
+                stepByStep.setStateSBS(stepByStep.sbsChangePassword));
         jpCheckPass.add(Box.createHorizontalStrut(6));
         jpCheckPass.add(chbPassword);
         jpCheckPass.add(btnChangePassword);
@@ -71,8 +79,7 @@ public class FrmPassword  extends CreateFrm{
 
         getJpContainerMain().add(getJpMain());
 
-        viewModalFrm(330, 150);
-        goSBS();
+        viewModalFrm(330, 150, false);
     }
 
     public void setTextToLabelPassword(String strText){
@@ -83,9 +90,46 @@ public class FrmPassword  extends CreateFrm{
         lStatusBar.getJlStatus().setText(strText);
     }
 
+    public CreatePasswordField getPfPassword() {
+        return pfPassword;
+    }
+
+    @Override
+    public InsideListener getListener() {
+        return insideListener;
+    }
+
+    public StepByStep getStepByStep() {
+        return stepByStep;
+    }
+
+    public void go() {
+        setVisible(true);
+        setFlVisibleFrm(true);
+        insideListener = new GUIInsideListener(this);
+        pfPassword.registerListener(this);
+        btnPassword.registerListener(this);
+        Thread threadFrm = new Thread(this);
+        threadFrm.start();
+    }
+
+    @Override
+    public void run() {
+        goSBS();
+    }
+
     private void goSBS() {
-        while (isVisible()){
+        stepByStep = new StepByStep(logger, this);
+        stepByStep.goStart();
+        while (isFlVisibleFrm() && !stepByStep.isFlOk()){
             Thread.yield();
         }
+        setVisible(false);
+        setFlVisibleFrm(false);
+    }
+
+    public boolean getResult(){
+        if (stepByStep == null) return false;
+        return stepByStep.isFlOk();
     }
 }

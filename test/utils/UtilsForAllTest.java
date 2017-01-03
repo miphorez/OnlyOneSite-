@@ -12,8 +12,13 @@ import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 import static utils.ConstantForAll.*;
+import static utils.UtilsForAll.getMD5String;
 
 public class UtilsForAllTest {
+    @Test
+    public void getMD5StringTest() throws Exception {
+        System.out.println(getMD5String("12345"));
+    }
 
 
     @Test

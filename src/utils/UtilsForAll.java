@@ -4,20 +4,21 @@ import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import net.sf.image4j.codec.ico.ICODecoder;
 import org.apache.commons.io.FileUtils;
 import xml.XMLSettingsUtils;
-import net.sf.image4j.codec.*;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -115,8 +116,8 @@ public class UtilsForAll {
     }
 
     private static File createDirForLog() {
-        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_USER_PROG)==null) return null;
-        return UtilsForAll.createDirectoryInProgramData(DIRECTORY_USER_PROG_LOG);
+        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA)==null) return null;
+        return UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA_LOG);
     }
 
     public static String getFileNameXMLParams() {
@@ -132,7 +133,7 @@ public class UtilsForAll {
     }
 
     public static File getTempDir() {
-        return UtilsForAll.getTempDirectory(DIRECTORY_USER_PROG);
+        return UtilsForAll.getTempDirectory(DIRECTORY_PROGRAMDATA);
     }
 
     public static File getTempDirectory(String strDirName) {
@@ -151,12 +152,12 @@ public class UtilsForAll {
     }
 
     private static File createDirForHTMLContent() {
-        return UtilsForAll.createDirectoryInProgramData(DIRECTORY_USER_PROG);
+        return UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA);
     }
 
     private static File createDirForXMLParams() {
-        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_USER_PROG)==null) return null;
-        return UtilsForAll.createDirectoryInProgramData(DIRECTORY_USER_PROG_SET);
+        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA)==null) return null;
+        return UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA_SET);
     }
 
     private static File createDirectoryInProgramData(String strDirName) {
@@ -296,5 +297,20 @@ public class UtilsForAll {
         String iStr = prefs.get(prefName, presetStr);
         if (Objects.equals(iStr, "")) iStr = presetStr;
         return iStr;
+    }
+
+    public static String getMD5String(String iStr) {
+        MessageDigest messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return "";
+        }
+        messageDigest.reset();
+        messageDigest.update(iStr.getBytes());
+        byte[] digest = messageDigest.digest();
+        BigInteger bigInt = new BigInteger(1,digest);
+        return bigInt.toString(16);
     }
 }
