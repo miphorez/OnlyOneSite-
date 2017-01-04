@@ -6,9 +6,11 @@ public enum EInsideCmd {
     NONE,
     PasswordField_Exit,
     PasswordField_Enter,
+    TextField_Exit,
+    TextField_Enter,
     ;
 
-    static EInsideCmd getCmdByStr(String strCmd){
+    public static EInsideCmd getCmdByStr(String strCmd){
         for (EInsideCmd insideCmd: values()) {
             if (Objects.equals(insideCmd.name(), strCmd)) return insideCmd;
         }

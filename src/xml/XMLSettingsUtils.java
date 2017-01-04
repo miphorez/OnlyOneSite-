@@ -58,4 +58,7 @@ public class XMLSettingsUtils extends XMLSettings {
         }
         return arrayList;
     }
+
+    public void setUpdateContent(TContent newContent) {
+    }
 }

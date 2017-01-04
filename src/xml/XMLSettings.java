@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import xml.preset.TContent;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,6 +24,7 @@ import java.util.logging.Logger;
 import static utils.ConstantForAll.NODE_CONTENT;
 import static utils.ConstantForAll.NODE_ROOT;
 import static utils.UtilsForAll.getFileNameXMLParams;
+import static utils.UtilsForAll.strToXorHexData;
 import static utils.UtilsForAll.xorHexDataToStr;
 
 public class XMLSettings {
@@ -58,7 +60,7 @@ public class XMLSettings {
         return true;
     }
 
-    public String getAttr(String strName, String strAttr, boolean modeCript) {
+    String getAttr(String strName, String strAttr, boolean modeCript) {
         String iAttr = "";
 
         NodeList entries;
@@ -108,7 +110,29 @@ public class XMLSettings {
         return true;
     }
 
-    public boolean saveSettingsFile() {
+    public boolean setUpdateItemContent(TContent tContent) {
+               return setAllAttrItemContent(tContent) && saveSettingsFile();
+    }
+
+    private boolean setAllAttrItemContent(TContent tContent) {
+        NodeList nodeList = getNodeList(docXMLSettings.getElementsByTagName(NODE_CONTENT));
+        if (nodeList == null) return false;
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element node = (Element) nodeList.item(i);
+            if (Objects.equals(node.getAttribute("id"), tContent.getStrId())) {
+                node.setAttribute("id", tContent.getStrId());
+                node.setAttribute("name", strToXorHexData(tContent.getName()));
+                node.setAttribute("link", strToXorHexData(tContent.getLink()));
+                node.setAttribute("type", strToXorHexData(tContent.getType().name()));
+                node.setAttribute("modeDel", tContent.getModeDel());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    boolean saveSettingsFile() {
         StreamResult result = new StreamResult(new File(fileName));
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer;
@@ -116,7 +140,7 @@ public class XMLSettings {
             transformer = transformerFactory.newTransformer();
         } catch (TransformerConfigurationException e) {
             logger.info(e.getMessage());
-            return true;
+            return false;
         }
         DOMSource source = new DOMSource(docXMLSettings);
         if (transformer != null) {
@@ -124,13 +148,21 @@ public class XMLSettings {
                 transformer.transform(source, result);
             } catch (TransformerException e) {
                 logger.info(e.getMessage());
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
-    public Document getDocXMLSettings() {
+    Document getDocXMLSettings() {
         return docXMLSettings;
+    }
+
+    NodeList getNodeList(NodeList itemNodeList) {
+        int num;
+        if (itemNodeList == null) return null;
+        num = itemNodeList.getLength();
+        if (num == 0) return null;
+        return itemNodeList;
     }
 }

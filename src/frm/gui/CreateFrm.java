@@ -16,7 +16,7 @@ public class CreateFrm extends JFrame {
     private JPanel jpContainerMain;
     private boolean flVisibleFrm;
 
-    public CreateFrm(){
+    public CreateFrm(String strGravity){
         setCustomIconForProgram(this);
         setTitle(PROGRAM_TITLE + " (v" + PROGRAM_VERSION + ")");
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -34,7 +34,7 @@ public class CreateFrm extends JFrame {
         jpMainBorder = new JPanel(new BorderLayout());
         jpContainerMain = new JPanel(new CardLayout());
         jpContainerMain.setBorder(new EmptyBorder(3,5,3,5));
-        jpMainBorder.add(jpContainerMain, BorderLayout.CENTER);
+        jpMainBorder.add(jpContainerMain, strGravity);
         setContentPane(jpMainBorder);
 
         jpMain = BoxLayoutUtils.createVerticalPanel();

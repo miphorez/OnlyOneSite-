@@ -16,7 +16,7 @@ public class FrmAboutAndVersion extends CreateFrm{
     private JTextPane taAbout;
 
     public FrmAboutAndVersion() {
-        super();
+        super(BorderLayout.CENTER);
 
         JPanel jpTAabout = new CreateLineBorderBox(0, 0, "О программе");
         CreateTextPane createTextPane_About = new CreateTextPane(false);

@@ -28,10 +28,6 @@ public class LoaderContent {
         return ourInstance;
     }
 
-    private LoaderContent() {
-        goLoadListTContent();
-    }
-
     private void goLoadListTContent() {
         logger.info("Загрузка контента...");
         listTContent = new XMLSettingsUtils(logger).getContentListFromXMLSettings();
@@ -40,12 +36,9 @@ public class LoaderContent {
         }
     }
 
-    public ArrayList<TContent> getListTContent() {
-        return listTContent;
-    }
-
     public TContent selectItemContent(){
-        List<String> optionList = new ArrayList<String>();
+        List<String> optionList = new ArrayList<>();
+        goLoadListTContent();
         for (TContent tContent: listTContent) {
             optionList.add(tContent.getName());
         }

@@ -23,10 +23,11 @@ import static utils.ConstantForAll.NODE_ROOT;
 import static utils.UtilsForAll.strToXorHexData;
 
 
-class XMLSettingsCreate extends XMLSettings{
+class XMLSettingsCreate{
+    private Logger logger;
 
     XMLSettingsCreate(Logger logger) {
-        super(logger);
+        this.logger = logger;
     }
 
     boolean go(String strFileNameSettings) {
@@ -62,10 +63,13 @@ class XMLSettingsCreate extends XMLSettings{
                 "аргумент \"Log\" - ведение log-файла (1 - включено, 0 - отключено)" );
         Element rootElement = doc.createElement(NODE_ROOT);
         rootElement.setAttribute("Log", "1");
-        rootElement.setAttribute("Mode", "777");
+        rootElement.setAttribute("LogLevel", "INFO");
         rootElement.setAttribute("Ver", utils.ConstantForAll.PROGRAM_VERSION);
         doc.appendChild(rootElement);
         rootElement.getParentNode().insertBefore(comment, rootElement);
+        comment = doc.createComment(
+                "аргумент \"id\" - идентификатор");
+        rootElement.appendChild(comment);
         comment = doc.createComment(
                 "аргумент \"link\" - URL ссылка на контент");
         rootElement.appendChild(comment);
@@ -81,6 +85,7 @@ class XMLSettingsCreate extends XMLSettings{
 
         for (TContent tContent: listContent) {
             Element script = doc.createElement(NODE_CONTENT);
+            script.setAttribute("id", tContent.getStrId());
             script.setAttribute("name", strToXorHexData(tContent.getName()));
             script.setAttribute("link", strToXorHexData(tContent.getLink()));
             script.setAttribute("type", strToXorHexData(tContent.getType().name()));

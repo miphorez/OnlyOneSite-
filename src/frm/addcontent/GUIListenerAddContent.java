@@ -1,22 +1,23 @@
-package frm.password;
+package frm.addcontent;
 
 import frm.gui.InsideListener;
+import frm.password.EInsideCmd;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class GUIInsideListener extends InsideListener implements Observer {
-    private FrmPassword frmPassword;
+public class GUIListenerAddContent extends InsideListener implements Observer {
+    private FrmAddContent frmAddContent;
 
-    public GUIInsideListener(FrmPassword frmPassword) {
-        this.frmPassword = frmPassword;
+    public GUIListenerAddContent(FrmAddContent frmAddContent) {
+        this.frmAddContent = frmAddContent;
     }
 
     @Override
     public void update(Observable o, Object arg) {
         String strCmd = (String)arg;
         switch (EInsideCmd.getCmdByStr(strCmd)){
-            case PasswordField_Enter:
+            case TextField_Enter:
                 cmdEnter();
                 break;
             case PasswordField_Exit:
@@ -28,10 +29,8 @@ public class GUIInsideListener extends InsideListener implements Observer {
     }
 
     private void cmdEnter() {
-        frmPassword.getStepByStep().getStateSBS().goEnter();
     }
 
     private void cmdReset() {
-        frmPassword.getStepByStep().getStateSBS().goReset();
     }
 }

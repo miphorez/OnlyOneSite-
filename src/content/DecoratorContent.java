@@ -3,12 +3,16 @@ package content;
 import chrriis.dj.nativeswing.swtimpl.components.*;
 import content.messenger.Messenger;
 import frm.about.FrmAboutAndVersion;
+import frm.addcontent.FrmAddContent;
 import frm.password.FrmPassword;
 import xml.LoaderContent;
+import xml.XMLSettingsAdd;
+import xml.XMLSettingsUtils;
 import xml.preset.TContent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public abstract class DecoratorContent {
@@ -29,7 +33,7 @@ public abstract class DecoratorContent {
         frmPassword = new FrmPassword(logger);
 
         new Thread(() -> {
-            while (true){
+            while (true) {
                 Thread.yield();
                 if (flAdmin != frmPassword.getResult()) {
                     flAdmin = frmPassword.getResult();
@@ -77,8 +81,15 @@ public abstract class DecoratorContent {
             protected void addMenuBarComponents(WebBrowserMenuBar menuBar) {
                 super.addMenuBarComponents(menuBar);
                 JMenu myMenu = new JMenu("Содержание");
-                myMenu.add(new JMenuItem("Добавить ссылку"));
-                myMenu.add(new JMenuItem("Удалить ссылку"));
+                JMenuItem menuItem = new JMenuItem("Добавить текущий ресурс");
+                menuItem.addActionListener(e -> showFrmAddContent(webBrowser.getResourceLocation()));
+                myMenu.add(menuItem);
+                menuItem = new JMenuItem("Редактировать параметры ресурса");
+                menuItem.addActionListener(e -> showFrmAddContent(""));
+                myMenu.add(menuItem);
+                menuItem = new JMenuItem("Удалить ресурс из содержания");
+                myMenu.add(menuItem);
+
                 menuBar.add(myMenu);
             }
 
@@ -93,9 +104,9 @@ public abstract class DecoratorContent {
                         LoaderContent.getInstance(logger, messenger).selectItemContent()
                 );
                 buttonBar.add(btnContent);
-                final JButton btnAddContent = new JButton("[Добавить]");
+                final JButton btnAddContent = new JButton("[Вход администратора]");
                 btnAddContent.addActionListener(e ->
-                        showAccessToAdminMode()
+                        switchOverAdminMode()
                 );
                 buttonBar.add(btnAddContent);
                 final JButton btnAbout = new JButton("[О программе]");
@@ -107,25 +118,21 @@ public abstract class DecoratorContent {
         };
     }
 
-    private void showAccessToAdminMode() {
-        switchOverAdminMode();
-    }
-
     private void showAdminMode() {
         if (flAdmin) {
             webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [admin mode]"));
             webBrowser.setMenuBarVisible(true);
-        }else {
+        } else {
             webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName()));
             webBrowser.setMenuBarVisible(false);
             webBrowser.setLocationBarVisible(false);
         }
     }
 
-    private void switchOverAdminMode(){
+    private void switchOverAdminMode() {
         frmPassword.go();
         new Thread(() -> {
-            while (frmPassword.isFlVisibleFrm()){
+            while (frmPassword.isFlVisibleFrm()) {
                 Thread.yield();
             }
         }).start();
@@ -133,6 +140,31 @@ public abstract class DecoratorContent {
 
     private void showFrmAbout() {
         new FrmAboutAndVersion();
+
+    }
+
+    private void showFrmAddContent(String strNewLink) {
+        FrmAddContent frmAddContent = new FrmAddContent(logger);
+        boolean flEditContent = false;
+        if (Objects.equals(strNewLink, "")) {
+            flEditContent = true;
+            frmAddContent.goUpdate(tContent);
+        } else {
+            frmAddContent.go(strNewLink);
+        }
+        boolean finalFlEditContent = flEditContent;
+        new Thread(() -> {
+            while (frmAddContent.isFlVisibleFrm()) {
+                Thread.yield();
+            }
+            TContent newContent = frmAddContent.getResultContent();
+            if (newContent != null) {
+                if (finalFlEditContent)
+                    new XMLSettingsUtils(logger).setUpdateContent(newContent);
+                else
+                    new XMLSettingsAdd(logger).go(newContent);
+            }
+        }).start();
     }
 
     public TContent getTContent() {

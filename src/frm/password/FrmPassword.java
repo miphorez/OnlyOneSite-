@@ -5,6 +5,7 @@ import frm.password.sbs.StepByStep;
 import utils.PrefParam;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.logging.Logger;
 
 public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenger{
@@ -18,7 +19,7 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
     private InsideListener insideListener;
 
     public FrmPassword(Logger logger) {
-        super();
+        super(BorderLayout.NORTH);
         this.logger = logger;
         setResizable(false);
         setTitle("Режим администратора");
@@ -69,11 +70,11 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
         jpCheckPass.add(Box.createHorizontalGlue());
 
         jpPassword.add(jpCheckPass);
+        jpPassword.add(Box.createVerticalStrut(10));
 
         lStatusBar = new CreateStatusBar(this);
         setTextToStatus("ожидание ввода пароля...");
 
-        jpPassword.add(Box.createVerticalGlue());
         jpPasswordBox.add(jpPassword);
         getJpMain().add(jpPasswordBox);
 
@@ -128,8 +129,7 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
         setFlVisibleFrm(false);
     }
 
-    public boolean getResult(){
-        if (stepByStep == null) return false;
-        return stepByStep.isFlOk();
+    public boolean getResult() {
+        return stepByStep != null && stepByStep.isFlOk();
     }
 }
