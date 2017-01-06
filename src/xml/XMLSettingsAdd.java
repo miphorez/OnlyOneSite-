@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import static utils.ConstantForAll.NODE_CONTENT;
 import static utils.ConstantForAll.NODE_ROOT;
-import static utils.UtilsForAll.strToXorHexData;
+import static utils.UtilsForAll.strCodeBase64;
 
 public class XMLSettingsAdd extends XMLSettings {
 
@@ -30,9 +30,9 @@ public class XMLSettingsAdd extends XMLSettings {
 
         Element content = doc.createElement(NODE_CONTENT);
         content.setAttribute("id", newContent.getStrId());
-        content.setAttribute("name", strToXorHexData(newContent.getName()));
-        content.setAttribute("link", strToXorHexData(newContent.getLink()));
-        content.setAttribute("type", strToXorHexData(newContent.getType().name()));
+        content.setAttribute("name", strCodeBase64(newContent.getName()));
+        content.setAttribute("link", strCodeBase64(newContent.getLink()));
+        content.setAttribute("type", strCodeBase64(newContent.getType().name()));
         content.setAttribute("modeDel", newContent.getModeDel());
         rootElement.appendChild(content);
 

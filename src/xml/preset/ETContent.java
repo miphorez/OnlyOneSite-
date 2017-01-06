@@ -4,11 +4,17 @@ import javax.swing.*;
 import java.util.Objects;
 
 public enum ETContent {
-    LINK_NONE,
-    LINK_HTML,
-    LINK_DOMAIN,
-    LINK_ONLINELIFE,
+    LINK_NONE(false),
+    LINK_HTML(true),
+    LINK_DOMAIN(true),
+    LINK_ONLINELIFE(false),
     ;
+
+    private boolean flView;
+
+    ETContent(boolean flView) {
+        this.flView = flView;
+    }
 
     public static ETContent getByStrType(String type) {
         for (ETContent etContent:values()) {
@@ -20,8 +26,12 @@ public enum ETContent {
     public static ComboBoxModel<ETContent> createListTypes() {
         DefaultComboBoxModel<ETContent> cbmType = new DefaultComboBoxModel<>();
         for (ETContent etContent:values()) {
-            if (!Objects.equals(etContent.name(), "LINK_NONE")) cbmType.addElement(etContent);
+            if (etContent.isFlView()) cbmType.addElement(etContent);
         }
         return cbmType;
+    }
+
+    public boolean isFlView() {
+        return flView;
     }
 }

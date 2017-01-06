@@ -1,17 +1,14 @@
 package xml;
 
 import org.junit.Test;
-import utils.ConstantForAll;
 import xml.preset.TContent;
 
 import javax.swing.*;
-import java.awt.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static utils.ConstantForAll.OOS_PNG_32;
+import static utils.ConstantForAll.ICO_PNG_32;
 
 public class LoaderContentTest {
     @Test
@@ -23,7 +20,7 @@ public class LoaderContentTest {
             optionList.add(tContent.getName());
         }
         Object[] options = optionList.toArray();
-        URL resURL = utils.UtilsForAll.getMainClass().getResource(OOS_PNG_32);
+        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_32);
         Object ob = JOptionPane.showInputDialog(
                 null,
                 "Сделайте выбор из списка",

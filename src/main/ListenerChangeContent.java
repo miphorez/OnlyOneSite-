@@ -10,6 +10,7 @@ import xml.preset.TContent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -28,9 +29,13 @@ public class ListenerChangeContent extends ListenerFromContent implements Observ
     public void update(Observable o, Object arg) {
         ArgForMessenger struct = new ArgForMessenger((ArgForMessenger) arg);
         TContent tContent = new TContent(
+                struct.strIdContent,
                 struct.strLinkContent,
                 struct.strNameContent,
-                struct.strTypeContent);
+                struct.strTypeContent,
+                Objects.equals(struct.strModeDel, "1"),
+                Objects.equals(struct.strModeAdmin, "1")
+        );
         execChangeContent(tContent);
     }
 

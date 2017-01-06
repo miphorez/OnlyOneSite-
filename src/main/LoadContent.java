@@ -26,7 +26,7 @@ public class LoadContent implements Messenger {
 
     void go() {
         listenerFromContent = new ListenerChangeContent(logger, frame, this);
-        TContent tContent = LoaderContent.getInstance(logger, this).selectItemContent();
+        TContent tContent = LoaderContent.getInstance(logger, this, false).selectItemContent();
         if (tContent == null) {
             logger.info("программа закрыта: не выбран контент");
             System.exit(-2);

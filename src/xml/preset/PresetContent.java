@@ -10,17 +10,22 @@ public class PresetContent {
     }
 
     private void createListPresetContent() {
-        listPresetContent.add(new TContent(1,
+        listPresetContent.add(new TContent(TContent.getRandomId(),
+                "https://www.google.by/",
+                "google-поиск",
+                ETContent.LINK_DOMAIN,
+                false));
+        listPresetContent.add(new TContent(TContent.getRandomId(),
+                "https://translate.google.com/",
+                "google-переводчик",
+                ETContent.LINK_HTML,
+                false));
+        listPresetContent.add(new TContent(TContent.getRandomId(),
                 "https://ru.wikipedia.org/",
                 "wikipedia",
                 ETContent.LINK_DOMAIN,
                 false));
-        listPresetContent.add(new TContent(2,
-                "https://translate.google.com/",
-                "translate.google",
-                ETContent.LINK_HTML,
-                false));
-        listPresetContent.add(new TContent(3,
+        listPresetContent.add(new TContent(TContent.getRandomId(),
                 "http://www.online-life.cc/favorites/",
                 "www.online-life.cc",
                 ETContent.LINK_ONLINELIFE,

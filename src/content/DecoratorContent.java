@@ -15,6 +15,9 @@ import java.awt.*;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import static utils.ConstantForAll.DEBUGMODE;
+import static utils.UtilsForAll.goDialogYesNo;
+
 public abstract class DecoratorContent {
     private boolean flAdmin = false;
     Logger logger;
@@ -30,17 +33,8 @@ public abstract class DecoratorContent {
         this.logger = logger;
         this.tContent = tContent;
         this.messenger = messenger;
-        frmPassword = new FrmPassword(logger);
-
-        new Thread(() -> {
-            while (true) {
-                Thread.yield();
-                if (flAdmin != frmPassword.getResult()) {
-                    flAdmin = frmPassword.getResult();
-                    showAdminMode();
-                }
-            }
-        }).start();
+        flAdmin = tContent.getModeAdmin();
+        frmPassword = new FrmPassword(logger, flAdmin);
     }
 
     public JComponent createContent() {
@@ -54,14 +48,33 @@ public abstract class DecoratorContent {
                 return createCustomWebBrowserDecorator(this, renderingComponent);
             }
         };
-        webBrowser.setMenuBarVisible(false);
-        webBrowser.setLocationBarVisible(false);
-        webBrowser.setStatusBarVisible(true);
-        webBrowser.setButtonBarVisible(true);
-
+        flAdmin = frmPassword.isFlAdminMode();
+        if (DEBUGMODE) {
+            webBrowser.setBarsVisible(true);
+            flAdmin = true;
+        } else if (flAdmin) {
+            webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [admin mode]"));
+            webBrowser.setMenuBarVisible(true);
+        } else {
+            webBrowser.setLocationBarVisible(false);
+            webBrowser.setMenuBarVisible(false);
+            webBrowser.setStatusBarVisible(true);
+            webBrowser.setButtonBarVisible(true);
+        }
         webBrowser.navigate(tContent.getLink());
         webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
         contentPane.add(webBrowserPanel, BorderLayout.CENTER);
+
+        new Thread(() -> {
+            while (true) {
+                Thread.yield();
+                if (flAdmin != frmPassword.getResult()) {
+                    flAdmin = frmPassword.getResult();
+                    frmPassword.setFlAdminMode(flAdmin);
+                    showAdminMode();
+                }
+            }
+        }).start();
 
         itemContent();
         return contentPane;
@@ -80,7 +93,7 @@ public abstract class DecoratorContent {
             @Override
             protected void addMenuBarComponents(WebBrowserMenuBar menuBar) {
                 super.addMenuBarComponents(menuBar);
-                JMenu myMenu = new JMenu("Содержание");
+                JMenu myMenu = new JMenu("Операции над ресурсом");
                 JMenuItem menuItem = new JMenuItem("Добавить текущий ресурс");
                 menuItem.addActionListener(e -> showFrmAddContent(webBrowser.getResourceLocation()));
                 myMenu.add(menuItem);
@@ -88,6 +101,7 @@ public abstract class DecoratorContent {
                 menuItem.addActionListener(e -> showFrmAddContent(""));
                 myMenu.add(menuItem);
                 menuItem = new JMenuItem("Удалить ресурс из содержания");
+                menuItem.addActionListener(e -> delThisContent());
                 myMenu.add(menuItem);
 
                 menuBar.add(myMenu);
@@ -101,7 +115,7 @@ public abstract class DecoratorContent {
                 buttonBar.add(buttonBar.getStopButton());
                 final JButton btnContent = new JButton("[Содержание]");
                 btnContent.addActionListener(e ->
-                        LoaderContent.getInstance(logger, messenger).selectItemContent()
+                        LoaderContent.getInstance(logger, messenger, flAdmin).selectItemContent()
                 );
                 buttonBar.add(btnContent);
                 final JButton btnAddContent = new JButton("[Вход администратора]");
@@ -116,6 +130,15 @@ public abstract class DecoratorContent {
                 buttonBar.add(btnAbout);
             }
         };
+    }
+
+    private void delThisContent() {
+        if (tContent.isModeDel()) {
+            if (goDialogYesNo("Подтверждение операции",
+                    "Вы действительно хотите удалить \nтекущий ресурс из содержания?"))
+                new XMLSettingsUtils(logger).delContent(tContent);
+        } else
+            JOptionPane.showMessageDialog(null, "Нельзя удалить ресурс \nиз базового списка");
     }
 
     private void showAdminMode() {
@@ -159,10 +182,12 @@ public abstract class DecoratorContent {
             }
             TContent newContent = frmAddContent.getResultContent();
             if (newContent != null) {
-                if (finalFlEditContent)
+                if (finalFlEditContent) {
+                    newContent.setId(tContent.getId());
                     new XMLSettingsUtils(logger).setUpdateContent(newContent);
-                else
+                } else {
                     new XMLSettingsAdd(logger).go(newContent);
+                }
             }
         }).start();
     }

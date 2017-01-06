@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 
 import static utils.ConstantForAll.NODE_CONTENT;
 import static utils.ConstantForAll.NODE_ROOT;
-import static utils.UtilsForAll.strToXorHexData;
+import static utils.UtilsForAll.strCodeBase64;
 
 
 class XMLSettingsCreate{
@@ -86,9 +86,9 @@ class XMLSettingsCreate{
         for (TContent tContent: listContent) {
             Element script = doc.createElement(NODE_CONTENT);
             script.setAttribute("id", tContent.getStrId());
-            script.setAttribute("name", strToXorHexData(tContent.getName()));
-            script.setAttribute("link", strToXorHexData(tContent.getLink()));
-            script.setAttribute("type", strToXorHexData(tContent.getType().name()));
+            script.setAttribute("name", strCodeBase64(tContent.getName()));
+            script.setAttribute("link", strCodeBase64(tContent.getLink()));
+            script.setAttribute("type", strCodeBase64(tContent.getType().name()));
             script.setAttribute("modeDel", tContent.getModeDel());
             rootElement.appendChild(script);
         }

@@ -11,8 +11,8 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -26,7 +26,6 @@ import java.util.logging.*;
 import java.util.logging.Formatter;
 import java.util.prefs.Preferences;
 
-import static netscape.security.PrivilegeManager.TEMP_FILENAME;
 import static utils.ConstantForAll.*;
 
 public class UtilsForAll {
@@ -93,12 +92,12 @@ public class UtilsForAll {
 //        utils.UtilsForAll.setLoggerConsoleHandler(logger);
 
         XMLSettingsUtils xmlSettingsUtils = new XMLSettingsUtils(logger);
-        if (!xmlSettingsUtils.isFileExists()){
+        if (!xmlSettingsUtils.isFileExists()) {
             logger.info("Ошибка файла настроек программы");
             return null;
         }
 
-        if (xmlSettingsUtils.isLogON()){
+        if (xmlSettingsUtils.isLogON()) {
             logger.setLevel(Level.INFO);
         } else logger.setLevel(Level.OFF);
 
@@ -116,7 +115,7 @@ public class UtilsForAll {
     }
 
     private static File createDirForLog() {
-        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA)==null) return null;
+        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA) == null) return null;
         return UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA_LOG);
     }
 
@@ -128,8 +127,8 @@ public class UtilsForAll {
         return strFileName;
     }
 
-    public static String getFileNameTemp() {
-        return getTempDir() + "/" + TEMP_FILENAME;
+    public static String getFileNameTemp(String strFileName) {
+        return getTempDir() + "/" + strFileName;
     }
 
     public static File getTempDir() {
@@ -156,7 +155,7 @@ public class UtilsForAll {
     }
 
     private static File createDirForXMLParams() {
-        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA)==null) return null;
+        if (UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA) == null) return null;
         return UtilsForAll.createDirectoryInProgramData(DIRECTORY_PROGRAMDATA_SET);
     }
 
@@ -240,52 +239,48 @@ public class UtilsForAll {
         return true;
     }
 
-    public static String strToXorHexData(String str){
-        String XOR_BinaryData = "sdaswan";
-        String result = "";
-        byte[] xorArr = XOR_BinaryData.getBytes();
-        byte[] strArr = str.getBytes();
-        int ii = 0;
-        for (int i = 0; i < str.length(); i++) {
-            byte b = (byte) (strArr[i] ^ xorArr[ii]);
-            String hex = Integer.toHexString(b);
-            if (hex.length() == 1) hex = "0" + hex;
-            result += hex;
-            ii++;
-            if (ii == (XOR_BinaryData.length())) ii=0;
+    public static String strCodeBase64(String str) {
+        byte[] bytes = new byte[0];
+        try {
+            bytes = str.getBytes("cp1251");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            bytes = str.getBytes();
+        }
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    public static String strDecodeBase64(String str) {
+        String result;
+        try {
+            result = new String(Base64.getDecoder().decode(str), "Windows-1251");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            result = new String(Base64.getDecoder().decode(str));
         }
         return result;
     }
 
-    public static String xorHexDataToStr(String str){
-        String XOR_BinaryData = "sdaswan";
-        String result = "";
-        String iStr = str;
-        byte[] xorArr = XOR_BinaryData.getBytes();
-        int ii = 0;
-        while (iStr.length() > 0){
-            String hs = iStr.substring(0,2);
-            byte b = (byte) Integer.parseInt(hs, 16);
-            b = (byte) (b ^ xorArr[ii]);
-            char ch = (char)(b&0x00FF);
-            result = result + String.valueOf(ch);
-            ii++;
-            if (ii == (XOR_BinaryData.length())) ii=0;
-            iStr = iStr.substring(2);
+    public static boolean copyFileFromResource(String strResource, String strFileName) {
+        URL resURL = getMainClass().getResource(strResource);
+        File dest = new File(strFileName);
+        try {
+            FileUtils.copyURLToFile(resURL, dest);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-        return result;
+        return true;
     }
 
     public static void setCustomIconForProgram(JFrame frame) {
         String MAIN_WINDOW_ICON = "/res/img/oos.ico";
-        URL resURL = utils.UtilsForAll.getMainClass().getResource(MAIN_WINDOW_ICON);
+        File file = new File(getFileNameTemp("oos.ico"));
+        if (!file.exists())
+            if (!copyFileFromResource(MAIN_WINDOW_ICON, getFileNameTemp("oos.ico"))) return;
         java.util.List<BufferedImage> images = null;
         try {
-            try {
-                images = ICODecoder.read(new File(resURL.toURI().getPath()));
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
+            images = ICODecoder.read(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -299,6 +294,20 @@ public class UtilsForAll {
         return iStr;
     }
 
+    public static boolean goDialogYesNo(String strTitle, String strQuestion) {
+        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_32);
+        Object[] strTitleBtn = {"Да", "Нет"};
+        int yesno = JOptionPane.showOptionDialog(null,
+                strQuestion,
+                strTitle,
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon(resURL),
+                strTitleBtn,
+                strTitleBtn[1]);
+        return (yesno == 0);
+    }
+
     public static String getMD5String(String iStr) {
         MessageDigest messageDigest = null;
         try {
@@ -310,7 +319,7 @@ public class UtilsForAll {
         messageDigest.reset();
         messageDigest.update(iStr.getBytes());
         byte[] digest = messageDigest.digest();
-        BigInteger bigInt = new BigInteger(1,digest);
+        BigInteger bigInt = new BigInteger(1, digest);
         return bigInt.toString(16);
     }
 }

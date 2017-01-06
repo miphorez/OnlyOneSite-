@@ -23,9 +23,7 @@ import java.util.logging.Logger;
 
 import static utils.ConstantForAll.NODE_CONTENT;
 import static utils.ConstantForAll.NODE_ROOT;
-import static utils.UtilsForAll.getFileNameXMLParams;
-import static utils.UtilsForAll.strToXorHexData;
-import static utils.UtilsForAll.xorHexDataToStr;
+import static utils.UtilsForAll.*;
 
 public class XMLSettings {
     public Logger logger;
@@ -85,9 +83,9 @@ public class XMLSettings {
             for (int i = 0; i < num; i++) {
                 Element node = (Element) entries.item(i);
                 if (node.hasAttribute(strAttr)) {
-                    String strDecriptAttr = modeCript ? xorHexDataToStr(node.getAttribute("name")) : node.getAttribute("name");
+                    String strDecriptAttr = modeCript ? strDecodeBase64(node.getAttribute("name")) : node.getAttribute("name");
                     if (Objects.equals(strDecriptAttr, strName)) {
-                        return modeCript ? xorHexDataToStr(node.getAttribute(strAttr)) : node.getAttribute(strAttr);
+                        return modeCript ? strDecodeBase64(node.getAttribute(strAttr)) : node.getAttribute(strAttr);
                     }
                 }
             }
@@ -110,8 +108,28 @@ public class XMLSettings {
         return true;
     }
 
-    public boolean setUpdateItemContent(TContent tContent) {
+    boolean setUpdateItemContent(TContent tContent) {
                return setAllAttrItemContent(tContent) && saveSettingsFile();
+    }
+
+    boolean delItemContent(TContent tContent) {
+               return delNodeItemContent(tContent) && saveSettingsFile();
+    }
+
+    private boolean delNodeItemContent(TContent tContent) {
+        NodeList listRoot = getNodeList(docXMLSettings.getElementsByTagName(NODE_ROOT));
+        Element nodeRoot = (Element) listRoot.item(0);
+        NodeList nodeList = getNodeList(docXMLSettings.getElementsByTagName(NODE_CONTENT));
+        if (nodeList == null) return false;
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Element node = (Element) nodeList.item(i);
+            if (Objects.equals(node.getAttribute("id"), tContent.getStrId())) {
+                nodeRoot.removeChild(node);
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean setAllAttrItemContent(TContent tContent) {
@@ -122,9 +140,9 @@ public class XMLSettings {
             Element node = (Element) nodeList.item(i);
             if (Objects.equals(node.getAttribute("id"), tContent.getStrId())) {
                 node.setAttribute("id", tContent.getStrId());
-                node.setAttribute("name", strToXorHexData(tContent.getName()));
-                node.setAttribute("link", strToXorHexData(tContent.getLink()));
-                node.setAttribute("type", strToXorHexData(tContent.getType().name()));
+                node.setAttribute("name", strCodeBase64(tContent.getName()));
+                node.setAttribute("link", strCodeBase64(tContent.getLink()));
+                node.setAttribute("type", strCodeBase64(tContent.getType().name()));
                 node.setAttribute("modeDel", tContent.getModeDel());
                 return true;
             }

@@ -1,5 +1,6 @@
 package utils;
 
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,18 +9,41 @@ import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Base64;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 import static utils.ConstantForAll.*;
-import static utils.UtilsForAll.getMD5String;
+import static utils.UtilsForAll.*;
 
 public class UtilsForAllTest {
+
+    @Test
+    public void copyFileFromResorceTest2() throws Exception {
+        String MAIN_WINDOW_ICON = "/res/img/oos.ico";
+        assertTrue(copyFileFromResource(MAIN_WINDOW_ICON, getFileNameTemp("oos.ico")));
+    }
+
+    @Test
+    public void copyFileFromResorceTest() throws Exception {
+        String MAIN_WINDOW_ICON = "/res/img/oos.ico";
+        URL resURL = getMainClass().getResource(MAIN_WINDOW_ICON);
+        File dest = new File(getFileNameTemp("oos.ico"));
+        FileUtils.copyURLToFile(resURL, dest);
+    }
+
+    @Test
+    public void strToBase64Test() throws Exception {
+        String encoded = strCodeBase64("Hello and Привет!");
+        System.out.println(encoded);
+        String decoded = strDecodeBase64(encoded);
+        System.out.println(decoded);
+    }
+
     @Test
     public void getMD5StringTest() throws Exception {
         System.out.println(getMD5String("12345"));
     }
-
 
     @Test
     public void exampleJSoupTest() throws Exception {

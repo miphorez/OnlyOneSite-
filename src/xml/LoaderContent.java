@@ -11,20 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static utils.ConstantForAll.OOS_PNG_32;
+import static utils.ConstantForAll.ICO_PNG_32;
 
 public class LoaderContent {
     private static Logger logger;
     private static LoaderContent ourInstance;
     private ArrayList<TContent> listTContent;
     private static MessengerChangeContent messengerContent = new MessengerChangeContent();
+    private static boolean modeAdmin;
 
-    public static LoaderContent getInstance(Logger log, Messenger messenger) {
+    public static LoaderContent getInstance(Logger log, Messenger messenger, boolean boolModeAdmin) {
         logger = log;
         if (ourInstance == null) {
             ourInstance = new LoaderContent();
         }
         messengerContent.addObserver(messenger.getListener());
+        LoaderContent.modeAdmin = boolModeAdmin;
         return ourInstance;
     }
 
@@ -43,7 +45,7 @@ public class LoaderContent {
             optionList.add(tContent.getName());
         }
         Object[] options = optionList.toArray();
-        URL resURL = utils.UtilsForAll.getMainClass().getResource(OOS_PNG_32);
+        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_32);
         Object strNameContent = JOptionPane.showInputDialog(
                 null,
                 "Сделайте выбор из списка",
@@ -55,9 +57,12 @@ public class LoaderContent {
         TContent tContent = TContent.getTContentByName(listTContent, (String) strNameContent);
         if (tContent != null) {
             ArgForMessenger arg = new ArgForMessenger(
+                    tContent.getStrId(),
                     tContent.getLink(),
                     tContent.getName(),
-                    tContent.getType().name()
+                    tContent.getType().name(),
+                    tContent.getModeDel(),
+                    modeAdmin
             );
             messengerContent.putNewContent(arg);
         }

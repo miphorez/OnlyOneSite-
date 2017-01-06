@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.logging.Logger;
 
+import static utils.ConstantForAll.DEBUGMODE;
+
 public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenger{
     private JLabel lPassword;
     private CreateStatusBar lStatusBar;
@@ -15,12 +17,14 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
     private CreateButton btnPassword;
     private CreatePasswordField pfPassword;
     private StepByStep stepByStep;
+    private boolean flAdminMode;
 
     private InsideListener insideListener;
 
-    public FrmPassword(Logger logger) {
+    public FrmPassword(Logger logger, boolean modeAdmin) {
         super(BorderLayout.NORTH);
         this.logger = logger;
+        flAdminMode = modeAdmin;
         setResizable(false);
         setTitle("Режим администратора");
 
@@ -107,6 +111,7 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
     public void go() {
         setVisible(true);
         setFlVisibleFrm(true);
+        flAdminMode = false;
         insideListener = new GUIInsideListener(this);
         pfPassword.registerListener(this);
         btnPassword.registerListener(this);
@@ -130,6 +135,14 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
     }
 
     public boolean getResult() {
-        return stepByStep != null && stepByStep.isFlOk();
+        return DEBUGMODE || flAdminMode || stepByStep != null && stepByStep.isFlOk();
+    }
+
+    public void setFlAdminMode(boolean flAdminMode) {
+        this.flAdminMode = flAdminMode;
+    }
+
+    public boolean isFlAdminMode() {
+        return flAdminMode;
     }
 }

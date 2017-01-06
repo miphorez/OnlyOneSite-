@@ -1,8 +1,9 @@
 package utils;
 
 public class ConstantForAll {
-    public static String PROGRAM_TITLE = "Only One Site";
-    public static String PROGRAM_VERSION = "1.1.2";
+    public static boolean DEBUGMODE = false;
+    public static String PROGRAM_TITLE = DEBUGMODE ? "Only One Site [DEBUG]" : "Only One Site";
+    public static String PROGRAM_VERSION = "1.2.0";
     static final String MODULE_SIGN = "OnlyOneSite";
 
     public static final String LS = System.getProperty("line.separator");
@@ -26,7 +27,7 @@ public class ConstantForAll {
 
     //изображения
     public static String OOS_PNG_16 = "/res/img/oos_16.png";
-    public static String OOS_PNG_32 = "/res/img/oos_32.png";
+    public static String ICO_PNG_32 = "/res/img/oos_32.png";
     public static String OOS_PNG_48 = "/res/img/oos_48.png";
     public static String OOS_PNG_64 = "/res/img/oos_64.png";
 }

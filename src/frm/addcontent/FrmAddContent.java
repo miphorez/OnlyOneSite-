@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.logging.Logger;
 
 public class FrmAddContent extends CreateFrm implements  Runnable, InsideMessenger {
-    private CreateComboBox cbType;
+    private CreateComboBoxTypeContent cbType;
     private Logger logger;
     private CreateTextField tfLink;
     private CreateTextField tfName;
@@ -74,8 +74,7 @@ public class FrmAddContent extends CreateFrm implements  Runnable, InsideMesseng
         jpContent.add(jplType);
 
         JPanel jpcbType = BoxLayoutUtils.createHorizontalPanel();
-        cbType = new CreateComboBox(0,0);
-        cbType.setModel(ETContent.createListTypes());
+        cbType = new CreateComboBoxTypeContent(0,0);
         jpcbType.add(Box.createHorizontalStrut(10));
         jpcbType.add(cbType);
         jpcbType.add(Box.createHorizontalStrut(10));
@@ -125,6 +124,8 @@ public class FrmAddContent extends CreateFrm implements  Runnable, InsideMesseng
         insideListener = new GUIListenerAddContent(this);
         tfLink.registerListener(this);
         tfLink.setText(strNewLink);
+        tfLink.setEnabled(true);
+        cbType.setEnabled(true);
         Thread threadFrm = new Thread(this);
         threadFrm.start();
     }
@@ -135,10 +136,13 @@ public class FrmAddContent extends CreateFrm implements  Runnable, InsideMesseng
         setVisible(true);
         setFlVisibleFrm(true);
         insideListener = new GUIListenerAddContent(this);
-        tfLink.registerListener(this);
         tfLink.setText(tContent.getLink());
+        if (tContent.isModeDel())
+            tfLink.setEnabled(true); else tfLink.setEnabled(false);
         tfName.setText(tContent.getName());
-        cbType.setSelectedItem(tContent);
+        cbType.setSelectedType(tContent.getType());
+        if (tContent.isModeDel())
+            cbType.setEnabled(true); else cbType.setEnabled(false);
         Thread threadFrm = new Thread(this);
         threadFrm.start();
     }

@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import static utils.ConstantForAll.FILE_XML_PARAMS_TEMP;
 import static utils.ConstantForAll.NODE_CONTENT;
 import static utils.ConstantForAll.NODE_ROOT;
 import static utils.UtilsForAll.getFileNameTemp;
@@ -28,20 +29,20 @@ class XMLSettingsUpdate {
     boolean go() {
         logger.info("Апдейт файла настроек:");
 
-        if (!new XMLSettingsCreate(logger).go(getFileNameTemp())) return false;
+        if (!new XMLSettingsCreate(logger).go(getFileNameTemp(FILE_XML_PARAMS_TEMP))) return false;
         logger.info("-> записан временный файл с новыми настройками");
 
         if (!moveParamsToTempFileSettings()) return false;
         logger.info("-> перенесены старые параметры в новый файл настроек");
 
-        return (new File(getFileNameTemp())).delete();
+        return (new File(getFileNameTemp(FILE_XML_PARAMS_TEMP))).delete();
     }
 
     private boolean moveParamsToTempFileSettings() {
         XMLSettings xmlSettingsOld = new XMLSettings(logger);
         Document docXMLSettingsOld = xmlSettingsOld.getDocXMLSettings();
         XMLSettings xmlSettingsNew = new XMLSettings(logger);
-        xmlSettingsNew.setFileName(getFileNameTemp());
+        xmlSettingsNew.setFileName(getFileNameTemp(FILE_XML_PARAMS_TEMP));
         Document docXMLSettingsNew = xmlSettingsNew.getDocXMLSettings();
 
         transferNodeAttr("", docXMLSettingsOld.getFirstChild(), docXMLSettingsNew);

@@ -51,6 +51,7 @@ public class XMLSettingsUtils extends XMLSettings {
         for (int i = 0; i < num; i++) {
             Element node = (Element) entries.item(i);
             arrayList.add(new TContent(
+                    node.getAttribute("id"),
                     node.getAttribute("link"),
                     node.getAttribute("name"),
                     node.getAttribute("type"),
@@ -60,5 +61,10 @@ public class XMLSettingsUtils extends XMLSettings {
     }
 
     public void setUpdateContent(TContent newContent) {
+        setUpdateItemContent(newContent);
+    }
+
+    public void delContent(TContent tContent) {
+        delItemContent(tContent);
     }
 }

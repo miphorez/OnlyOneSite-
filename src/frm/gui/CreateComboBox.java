@@ -1,11 +1,9 @@
 package frm.gui;
 
-import xml.preset.ETContent;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class CreateComboBox extends JComboBox<ETContent> {
+public class CreateComboBox extends JComboBox {
 
     public CreateComboBox(int sizeX, int sizeY) {
         super();

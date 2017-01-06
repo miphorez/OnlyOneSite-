@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
-import static utils.UtilsForAll.xorHexDataToStr;
+import static utils.UtilsForAll.strDecodeBase64;
 
 public class TContent {
     private int id;
@@ -14,6 +14,7 @@ public class TContent {
     private String name;
     private ETContent type;
     private boolean modeDel;
+    private boolean modeAdmin;
 
     TContent(int id, String link, String name, ETContent type, boolean modeDel) {
         this.id = id;
@@ -23,11 +24,11 @@ public class TContent {
         this.modeDel = modeDel;
     }
 
-    public TContent(String link, String name, String type, String modeDel) {
-        id = getRandomId();
-        this.link = xorHexDataToStr(link);
-        this.name = xorHexDataToStr(name);
-        this.type = ETContent.getByStrType(xorHexDataToStr(type));
+    public TContent(String strId, String link, String name, String type, String modeDel) {
+        id = Integer.parseInt(strId);
+        this.link = strDecodeBase64(link);
+        this.name = strDecodeBase64(name);
+        this.type = ETContent.getByStrType(strDecodeBase64(type));
         this.modeDel = Objects.equals(modeDel, "1");
     }
 
@@ -37,6 +38,15 @@ public class TContent {
         this.name = name;
         this.type = ETContent.getByStrType(type);
         this.modeDel = true;
+    }
+
+    public TContent(String strId, String link, String name, String type, boolean modeDel, boolean modeAdmin) {
+        id = Integer.parseInt(strId);
+        this.link = link;
+        this.name = name;
+        this.type = ETContent.getByStrType(type);
+        this.modeDel = modeDel;
+        this.modeAdmin = modeAdmin;
     }
 
     public String getLink() {
@@ -67,12 +77,28 @@ public class TContent {
         return null;
     }
 
-    public int getRandomId() {
+    public static int getRandomId() {
         Random random = new Random(System.currentTimeMillis());
         return random.nextInt(0x7FFFFFFF);
     }
 
     public String getStrId() {
         return Integer.toString(id);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isModeDel() {
+        return modeDel;
+    }
+
+    public boolean getModeAdmin() {
+        return modeAdmin;
     }
 }
