@@ -7,7 +7,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
+import java.awt.*;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.Base64;
 import java.util.logging.Logger;
@@ -17,6 +19,21 @@ import static utils.ConstantForAll.*;
 import static utils.UtilsForAll.*;
 
 public class UtilsForAllTest {
+
+    @Test
+    public void substrLinkTest() throws Exception {
+        String str = "\\http://www.gnu.org/licenses/\\";
+        str = str.substring(1, str.length() - 1);
+        System.out.print(str);
+    }
+
+    @Test
+    public void openLinkTest() throws Exception {
+        if(Desktop.isDesktopSupported())
+        {
+            Desktop.getDesktop().browse(new URI("http://www.example.com"));
+        }
+    }
 
     @Test
     public void copyFileFromResorceTest2() throws Exception {
