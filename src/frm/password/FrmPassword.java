@@ -26,7 +26,7 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
         this.logger = logger;
         flAdminMode = modeAdmin;
         setResizable(false);
-        setTitle("Режим администратора");
+        setTitle("Родительский режим");
 
         JPanel jpPasswordBox = new CreateLineBorderBox(0, 0, " Доступ к режиму ");
 

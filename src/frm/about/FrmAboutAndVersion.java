@@ -58,9 +58,8 @@ public class FrmAboutAndVersion extends CreateFrm {
             if (Desktop.isDesktopSupported()) {
                 try {
                     String strLink = e.getDescription();
-                    System.out.print(strLink);
-                    strLink = strLink.substring(1, strLink.length() - 1);
                     Desktop.getDesktop().browse(new URI(strLink));
+                    //TODO сделать загрузку страниц в самой программе
                 } catch (IOException | URISyntaxException e1) {
                     e1.printStackTrace();
                 }
@@ -75,6 +74,7 @@ public class FrmAboutAndVersion extends CreateFrm {
         readResourceFileToTextArea(TXT_ABOUT, taAbout);
         readResourceFileToTextArea(TXT_HISTORY, taHistory);
         readResourceFileToTextArea(TXT_COPYING, taCopying);
+        //TODO добавить эмблему лицензии в программу
         getJpMain().revalidate();
     }
 

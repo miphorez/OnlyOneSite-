@@ -53,7 +53,7 @@ public abstract class DecoratorContent {
             webBrowser.setBarsVisible(true);
             flAdmin = true;
         } else if (flAdmin) {
-            webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [admin mode]"));
+            webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [родительский режим]"));
             webBrowser.setMenuBarVisible(true);
         } else {
             webBrowser.setLocationBarVisible(false);
@@ -118,7 +118,7 @@ public abstract class DecoratorContent {
                         LoaderContent.getInstance(logger, messenger, flAdmin).selectItemContent()
                 );
                 buttonBar.add(btnContent);
-                final JButton btnAddContent = new JButton("[Вход администратора]");
+                final JButton btnAddContent = new JButton("[Вход в родительский режим]");
                 btnAddContent.addActionListener(e ->
                         switchOverAdminMode()
                 );
@@ -143,7 +143,7 @@ public abstract class DecoratorContent {
 
     private void showAdminMode() {
         if (flAdmin) {
-            webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [admin mode]"));
+            webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName() + " [родительский режим]"));
             webBrowser.setMenuBarVisible(true);
         } else {
             webBrowserPanel.setBorder(BorderFactory.createTitledBorder(tContent.getName()));
