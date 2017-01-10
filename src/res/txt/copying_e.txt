@@ -38,10 +38,25 @@ div {
 <p>
 <img src="
 gplv3-88x31.png
-" />
+" /><b>OnlyOneSite</b> is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+<br>
+<br>
+OnlyOneSite is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+<br>
+<br>
+You should have received a copy of the GNU General Public License
+along with OnlyOneSite.  If not, see <a href="http://www.gnu.org/licenses/">www.gnu.org/licenses</a>.
+</p>
+<p>
 <b>OnlyOneSite</b> - это свободная программа: вы можете перераспространять ее и/или изменять
 ее на условиях Стандартной общественной лицензии GNU в том виде, в каком
-она была опубликована Фондом свободного программного обеспечения, либо
+она была опубликована Фондом свободного программного обеспечения; либо
 версии 3 лицензии, либо (по вашему выбору) любой более поздней версии.
 <br>
 <br>
@@ -51,8 +66,8 @@ gplv3-88x31.png
 общественной лицензии GNU.
 <br>
 <br>
-Техт Стандартной общественной лицензии GNU вы можете посмотреть здесь:
-<a href="http://www.gnu.org/licenses/">www.gnu.org/licenses</a>.
+Вы должны были получить копию Стандартной общественной лицензии GNU
+вместе с этой программой. Если это не так, см. <a href="http://www.gnu.org/licenses/">www.gnu.org/licenses</a>.
 </p>
 </div>
 </body></html>

@@ -6,6 +6,7 @@ import org.apache.commons.io.FileUtils;
 import xml.XMLSettingsUtils;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -22,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 import java.util.prefs.Preferences;
@@ -274,10 +276,33 @@ public class UtilsForAll {
     }
 
     public static void setCustomIconForProgram(JFrame frame) {
-        String MAIN_WINDOW_ICON = "/res/img/oos.ico";
-        File file = new File(getFileNameTemp("oos.ico"));
-        if (!file.exists())
-            if (!copyFileFromResource(MAIN_WINDOW_ICON, getFileNameTemp("oos.ico"))) return;
+        ArrayList<Image> images = new ArrayList<>();
+        ImageIcon icon = new ImageIcon(getMainClass().getResource(ICO_PNG_16));
+        images.add(icon.getImage());
+        icon = new ImageIcon(getMainClass().getResource(ICO_PNG_32));
+        images.add(icon.getImage());
+        icon = new ImageIcon(getMainClass().getResource(ICO_PNG_48));
+        images.add(icon.getImage());
+        icon = new ImageIcon(getMainClass().getResource(ICO_PNG_64));
+        images.add(icon.getImage());
+        frame.setIconImages(images);
+    }
+
+    private static BufferedImage makeBIM(Image image, int w, int h){
+        BufferedImage bim = new BufferedImage(
+                w,
+                h,
+                BufferedImage.TYPE_INT_RGB);
+        Graphics g = bim.createGraphics();
+        g.drawImage(image,0,0,null);
+        g.dispose();
+        return bim;
+    }
+
+    public static void setCustomIconForProgram_(JFrame frame) {
+        String strImgInTemp = getFileNameResourceImgInTemp(MAIN_WINDOW_ICON);
+        File file = new File(strImgInTemp);
+        if (!file.exists()) return;
         java.util.List<BufferedImage> images = null;
         try {
             images = ICODecoder.read(file);
@@ -285,6 +310,13 @@ public class UtilsForAll {
             e.printStackTrace();
         }
         frame.setIconImages(images);
+    }
+
+    public static String getFileNameResourceImgInTemp(String strImgName) {
+        File file = new File(getFileNameTemp(strImgName));
+        if (!file.exists())
+            if (!copyFileFromResource(RES_IMG+strImgName, getFileNameTemp(strImgName))) return "";
+        return getFileNameTemp(strImgName);
     }
 
     public static String getPrefString(String prefName, String presetStr) {
@@ -295,7 +327,7 @@ public class UtilsForAll {
     }
 
     public static boolean goDialogYesNo(String strTitle, String strQuestion) {
-        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_32);
+        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_48);
         Object[] strTitleBtn = {"Да", "Нет"};
         int yesno = JOptionPane.showOptionDialog(null,
                 strQuestion,

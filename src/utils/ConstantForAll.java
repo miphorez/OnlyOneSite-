@@ -26,8 +26,11 @@ public class ConstantForAll {
     public static String DIRECTORY_PROGRAMDATA_LOG = MODULE_SIGN + "\\Log";
 
     //изображения
-    public static String OOS_PNG_16 = "/res/img/oos_16.png";
+    public static String MAIN_WINDOW_ICON = "oos.ico";
+    public static String RES_IMG = "/res/img/";
+    public static String ICO_PNG_16 = "/res/img/oos_16.png";
     public static String ICO_PNG_32 = "/res/img/oos_32.png";
-    public static String OOS_PNG_48 = "/res/img/oos_48.png";
-    public static String OOS_PNG_64 = "/res/img/oos_64.png";
+    public static String ICO_PNG_48 = "/res/img/oos_48.png";
+    public static String ICO_PNG_64 = "/res/img/oos_64.png";
+    public static String GPLV3_PNG = "/res/img/gplv3-88x31.png";
 }

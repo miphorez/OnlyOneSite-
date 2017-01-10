@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static utils.ConstantForAll.ICO_PNG_32;
+import static utils.ConstantForAll.*;
 
 public class LoaderContentTest {
     @Test
@@ -20,7 +20,7 @@ public class LoaderContentTest {
             optionList.add(tContent.getName());
         }
         Object[] options = optionList.toArray();
-        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_32);
+        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_48);
         Object ob = JOptionPane.showInputDialog(
                 null,
                 "Сделайте выбор из списка",

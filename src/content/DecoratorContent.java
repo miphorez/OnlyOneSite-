@@ -162,7 +162,7 @@ public abstract class DecoratorContent {
     }
 
     private void showFrmAbout() {
-        new FrmAboutAndVersion();
+        FrmAboutAndVersion.getInstance();
 
     }
 

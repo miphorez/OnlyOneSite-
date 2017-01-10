@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static utils.ConstantForAll.ICO_PNG_32;
+import static utils.ConstantForAll.*;
 
 public class LoaderContent {
     private static Logger logger;
@@ -45,7 +45,7 @@ public class LoaderContent {
             optionList.add(tContent.getName());
         }
         Object[] options = optionList.toArray();
-        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_32);
+        URL resURL = utils.UtilsForAll.getMainClass().getResource(ICO_PNG_48);
         Object strNameContent = JOptionPane.showInputDialog(
                 null,
                 "Сделайте выбор из списка",

@@ -13,12 +13,23 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import static utils.ConstantForAll.LS;
+import static utils.UtilsForAll.getFileNameResourceImgInTemp;
 import static utils.UtilsForAll.getMainClass;
 
 public class FrmAboutAndVersion extends CreateFrm {
     private JTextPane taHistory;
     private JTextPane taAbout;
     private JTextPane taCopying;
+
+    private static FrmAboutAndVersion ourInstance;
+
+    public static FrmAboutAndVersion getInstance() {
+        if (ourInstance == null) {
+            ourInstance = new FrmAboutAndVersion();
+        }
+        return ourInstance;
+    }
+
 
     public FrmAboutAndVersion() {
         super(BorderLayout.CENTER);
@@ -74,7 +85,6 @@ public class FrmAboutAndVersion extends CreateFrm {
         readResourceFileToTextArea(TXT_ABOUT, taAbout);
         readResourceFileToTextArea(TXT_HISTORY, taHistory);
         readResourceFileToTextArea(TXT_COPYING, taCopying);
-        //TODO добавить эмблему лицензии в программу
         getJpMain().revalidate();
     }
 
@@ -96,6 +106,12 @@ public class FrmAboutAndVersion extends CreateFrm {
         try {
             if (bufferedReader != null) {
                 while ((oneLine = bufferedReader.readLine()) != null) {
+                    if ((oneLine.contains(".png"))||
+                        (oneLine.contains(".jpg"))||
+                        (oneLine.contains(".gif")))
+                    {
+                        oneLine = "file:\\"+getFileNameResourceImgInTemp(oneLine.trim());
+                    }
                     strArea += oneLine + LS;
                 }
             }
