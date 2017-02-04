@@ -8,6 +8,7 @@ public enum ETContent {
     LINK_HTML(true),
     LINK_DOMAIN(true),
     LINK_ONLINELIFE(false),
+    LINK_ONLINEMULTFILMY(false),
     ;
 
     private boolean flView;

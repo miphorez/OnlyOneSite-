@@ -8,6 +8,7 @@ public enum CmdForMessenger {
     GOTO_LINK_DOMAIN("%"+LINK_DOMAIN),
     GOTO_LINK_HTML("%"+LINK_HTML),
     GOTO_LINK_ONLINELIFE("%"+LINK_ONLINELIFE),
+    GOTO_LINK_ONLINEMULTFILMY("%"+LINK_ONLINEMULTFILMY),
     ;
     private String strVal = "";
 

@@ -19,6 +19,15 @@ public class FrmAddContent extends CreateFrm implements  Runnable, InsideMesseng
     private InsideListener insideListener;
     private boolean flOk;
 
+    private static FrmAddContent ourInstance;
+
+    public static FrmAddContent getInstance(Logger logger) {
+        if (ourInstance == null) {
+            ourInstance = new FrmAddContent(logger);
+        }
+        return ourInstance;
+    }
+
     public FrmAddContent(Logger logger) {
         super(BorderLayout.NORTH);
         this.logger = logger;

@@ -1,9 +1,9 @@
 package utils;
 
 public class ConstantForAll {
-    public static boolean DEBUGMODE = false;
-    public static String PROGRAM_TITLE = DEBUGMODE ? "Only One Site [DEBUG]" : "Only One Site";
-    public static String PROGRAM_VERSION = "1.2.1";
+    public static boolean DEBUG = true;
+    public static String PROGRAM_TITLE = DEBUG ? "Only One Site [DEBUG]" : "Only One Site";
+    public static String PROGRAM_VERSION = "1.2.2";
     static final String MODULE_SIGN = "OnlyOneSite";
 
     public static final String LS = System.getProperty("line.separator");

@@ -36,6 +36,27 @@ public class UtilsForAllTest {
     }
 
     @Test
+    public void isContentLegalTest() throws Exception {
+//    https://www.youtube.com/watch?v=K-yTrFDHpbw
+        String strNewResource = "http://www.youtube.com/embed/9hWBOVesZQA?list=PLXnIohISHNIvsnUNe8RwvhksUSFzdQsiT";
+        int pos = strNewResource.indexOf("?list=");
+        if (pos != -1){
+            strNewResource = strNewResource.substring(0,pos);
+        }
+        System.out.println(strNewResource);
+        pos = strNewResource.indexOf("http:");
+        if (pos != -1){
+            strNewResource = strNewResource.replaceAll("http:","https:");
+        }
+        System.out.println(strNewResource);
+        pos = strNewResource.indexOf("embed/");
+        if (pos != -1){
+            strNewResource = strNewResource.replaceAll("embed/","watch?v=");
+        }
+        System.out.println(strNewResource);
+    }
+
+    @Test
     public void copyFileFromResorceTest2() throws Exception {
         String MAIN_WINDOW_ICON = "/res/img/oos.ico";
         assertTrue(copyFileFromResource(MAIN_WINDOW_ICON, getFileNameTemp("oos.ico")));

@@ -8,23 +8,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.logging.Logger;
 
-import static utils.ConstantForAll.DEBUGMODE;
+import static utils.ConstantForAll.DEBUG;
 
 public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenger{
     private JLabel lPassword;
     private CreateStatusBar lStatusBar;
-    private Logger logger;
+    private static Logger logger;
     private CreateButton btnPassword;
     private CreatePasswordField pfPassword;
     private StepByStep stepByStep;
-    private boolean flAdminMode;
+    private static boolean flAdminMode;
 
     private InsideListener insideListener;
 
+    private static FrmPassword ourInstance;
+
+    public static FrmPassword getInstance(Logger logger, boolean modeAdmin) {
+        if (ourInstance == null) {
+            ourInstance = new FrmPassword(logger, modeAdmin);
+        }
+        FrmPassword.logger = logger;
+        flAdminMode = modeAdmin;
+        return ourInstance;
+    }
+
     public FrmPassword(Logger logger, boolean modeAdmin) {
         super(BorderLayout.NORTH);
-        this.logger = logger;
-        flAdminMode = modeAdmin;
         setResizable(false);
         setTitle("Родительский режим");
 
@@ -135,7 +144,7 @@ public class FrmPassword  extends CreateFrm implements  Runnable, InsideMessenge
     }
 
     public boolean getResult() {
-        return DEBUGMODE || flAdminMode || stepByStep != null && stepByStep.isFlOk();
+        return DEBUG || flAdminMode || stepByStep != null && stepByStep.isFlOk();
     }
 
     public void setFlAdminMode(boolean flAdminMode) {

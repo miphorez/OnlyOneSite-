@@ -3,6 +3,7 @@ package main;
 import content.Content_DOMAIN;
 import content.Content_HTML;
 import content.Content_ONLINELIFE;
+import content.Content_ONLINEMULTFILMY;
 import content.messenger.ArgForMessenger;
 import content.messenger.Messenger;
 import main.listener.ListenerFromContent;
@@ -59,6 +60,13 @@ public class ListenerChangeContent extends ListenerFromContent implements Observ
                 frame.getContentPane().add(
                         contentOnlinelife.createContent(),
                         BorderLayout.CENTER);
+                break;
+            case LINK_ONLINEMULTFILMY:
+                Content_ONLINEMULTFILMY contentOnlinemultfilmy = new Content_ONLINEMULTFILMY(logger, tContent, messenger);
+                frame.getContentPane().add(
+                        contentOnlinemultfilmy.createContent(),
+                        BorderLayout.CENTER);
+                break;
         }
     }
 }

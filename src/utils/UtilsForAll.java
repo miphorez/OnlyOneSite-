@@ -86,12 +86,15 @@ public class UtilsForAll {
     public static Logger setupLogger() {
 
         Logger logger = Logger.getLogger(utils.UtilsForAll.getMainClass().getName());
-        if (!utils.UtilsForAll.setLoggerFileHandler(logger)) {
-            System.out.println("Ошибка настройки логгера");
-            return null;
+        if (DEBUG) {
+            utils.UtilsForAll.setLoggerConsoleHandler(logger);
+        } else {
+            if (!utils.UtilsForAll.setLoggerFileHandler(logger)) {
+                JOptionPane.showMessageDialog(null, "Ошибка доступа к настройкам логгера");
+                return null;
+            }
         }
-        //log выводится только в консоль
-//        utils.UtilsForAll.setLoggerConsoleHandler(logger);
+        logger.fine("Logger Ok!");
 
         XMLSettingsUtils xmlSettingsUtils = new XMLSettingsUtils(logger);
         if (!xmlSettingsUtils.isFileExists()) {

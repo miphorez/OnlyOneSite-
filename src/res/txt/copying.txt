@@ -52,7 +52,7 @@ gplv3-88x31.png
 <br>
 <br>
 Техт Стандартной общественной лицензии GNU вы можете посмотреть здесь:
-<a href="http://www.gnu.org/licenses/">www.gnu.org/licenses</a>.
+<a href="http://www.gnu.org/licenses/gpl-3.0.html">www.gnu.org/licenses</a>.
 </p>
 </div>
 </body></html>

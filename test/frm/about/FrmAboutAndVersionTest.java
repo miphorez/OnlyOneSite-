@@ -13,7 +13,7 @@ public class FrmAboutAndVersionTest {
         Logger logger = Logger.getLogger("test");
         if (!utils.UtilsForAll.setLoggerConsoleHandler(logger)) assertTrue(false);
         logger.info("логгер запущен");
-        FrmAboutAndVersion frmAboutAndVersion = FrmAboutAndVersion.getInstance();
+        FrmAboutAndVersion frmAboutAndVersion = FrmAboutAndVersion.getInstance(null);
         while (frmAboutAndVersion.isFlVisibleFrm()){
             Thread.yield();
         }

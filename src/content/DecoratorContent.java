@@ -12,10 +12,12 @@ import xml.preset.TContent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-import static utils.ConstantForAll.DEBUGMODE;
+import static utils.ConstantForAll.DEBUG;
 import static utils.UtilsForAll.goDialogYesNo;
 
 public abstract class DecoratorContent {
@@ -28,13 +30,15 @@ public abstract class DecoratorContent {
     private TContent tContent;
     private Messenger messenger;
     private FrmPassword frmPassword;
+    private boolean flMousePressed;
 
     DecoratorContent(Logger logger, TContent tContent, Messenger messenger) {
         this.logger = logger;
         this.tContent = tContent;
         this.messenger = messenger;
         flAdmin = tContent.getModeAdmin();
-        frmPassword = new FrmPassword(logger, flAdmin);
+        frmPassword = FrmPassword.getInstance(logger, flAdmin);
+        flMousePressed = false;
     }
 
     public JComponent createContent() {
@@ -48,8 +52,22 @@ public abstract class DecoratorContent {
                 return createCustomWebBrowserDecorator(this, renderingComponent);
             }
         };
+
+        webBrowser.getNativeComponent().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                flMousePressed = true;
+                super.mouseReleased(e);
+            }
+        });
+
         flAdmin = frmPassword.isFlAdminMode();
-        if (DEBUGMODE) {
+        if (DEBUG) {
             webBrowser.setBarsVisible(true);
             flAdmin = true;
         } else if (flAdmin) {
@@ -162,12 +180,11 @@ public abstract class DecoratorContent {
     }
 
     private void showFrmAbout() {
-        FrmAboutAndVersion.getInstance();
-
+        FrmAboutAndVersion.getInstance(messenger);
     }
 
     private void showFrmAddContent(String strNewLink) {
-        FrmAddContent frmAddContent = new FrmAddContent(logger);
+        FrmAddContent frmAddContent = FrmAddContent.getInstance(logger);
         boolean flEditContent = false;
         if (Objects.equals(strNewLink, "")) {
             flEditContent = true;
@@ -196,4 +213,11 @@ public abstract class DecoratorContent {
         return tContent;
     }
 
+    public void setFlMousePressed(boolean flMousePressed) {
+        this.flMousePressed = flMousePressed;
+    }
+
+    public boolean isFlMousePressed() {
+        return flMousePressed;
+    }
 }

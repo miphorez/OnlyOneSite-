@@ -30,6 +30,11 @@ public class PresetContent {
                 "www.online-life.cc",
                 ETContent.LINK_ONLINELIFE,
                 false));
+        listPresetContent.add(new TContent(TContent.getRandomId(),
+                "http://onlinemultfilmy.ru/",
+                "onlinemultfilmy.ru",
+                ETContent.LINK_ONLINEMULTFILMY,
+                false));
     }
 
     public ArrayList<TContent> getListPresetContent() {

@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class Content_ONLINELIFE extends DecoratorContent {
-    private static final String urlMain = "http://www.online-life.cc/";
+    private static final String urlMain = "http://http://onlinemultfilmy.ru/";
     private static final String urlBookmarks = "http://www.online-life.cc/favorites/";
     private static final String urlLogOut = "http://www.online-life.cc/index.php?action=logout";
     private static final String urlFavoritesOut = "http://www.online-life.cc/index.php?do=favorites&amp;doaction=del";
