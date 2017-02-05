@@ -23,7 +23,7 @@ public class Content_ONLINEMULTFILMY extends DecoratorContent {
             @Override
             public void locationChanging(WebBrowserNavigationEvent e) {
                 strNewResource = e.getNewResourceLocation();
-                if (isAdminMode() && !utils.ConstantForAll.DEBUG) return;
+                if (isAdminMode()) return;
                 if (!isContentLegal()) {
 //                    logger.info("запрещена ссылка: " + strNewResource);
                     e.consume();

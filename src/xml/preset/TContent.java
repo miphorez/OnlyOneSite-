@@ -16,6 +16,17 @@ public class TContent {
     private boolean modeDel;
     private boolean modeAdmin;
 
+    public TContent(String strId) {
+        if (Objects.equals(strId, ""))
+            id = getRandomId();
+        else
+            id = Integer.parseInt(strId);
+        this.link = "";
+        this.name = "";
+        this.type = ETContent.LINK_NONE;
+        this.modeDel = true;
+    }
+
     TContent(int id, String link, String name, ETContent type, boolean modeDel) {
         this.id = id;
         this.link = link;
@@ -25,7 +36,10 @@ public class TContent {
     }
 
     public TContent(String strId, String link, String name, String type, String modeDel) {
-        id = Integer.parseInt(strId);
+        if (Objects.equals(strId, ""))
+            id = getRandomId();
+        else
+            id = Integer.parseInt(strId);
         this.link = strDecodeBase64(link);
         this.name = strDecodeBase64(name);
         this.type = ETContent.getByStrType(strDecodeBase64(type));
@@ -67,12 +81,12 @@ public class TContent {
 
     @Override
     public String toString() {
-        return id +" | "+ name +" | "+ link  +" | "+ type.name() +" | "+ modeDel;
+        return id + " | " + name + " | " + link + " | " + type.name() + " | " + modeDel;
     }
 
     public static TContent getTContentByName(ArrayList<TContent> listTContent, String strName) {
-        for (TContent tContent: listTContent) {
-            if(Objects.equals(tContent.getName(), strName)) return tContent;
+        for (TContent tContent : listTContent) {
+            if (Objects.equals(tContent.getName(), strName)) return tContent;
         }
         return null;
     }
@@ -101,6 +115,18 @@ public class TContent {
 
     public void setModeDel(boolean modeDel) {
         this.modeDel = modeDel;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(ETContent type) {
+        this.type = type;
     }
 
     public boolean isModeDel() {

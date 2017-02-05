@@ -18,8 +18,8 @@ class ControlVersion extends XMLSettings{
             logger.info("Ошибка! Версия программы ниже, чем версия файла настроек");
             return false;
         }
-//        return tVersion.isEqVer(ConstantForAll.PROGRAM_VERSION) ||
-//               !tVersion.isEqVerHi(ConstantForAll.PROGRAM_VERSION) ||
-                return new XMLSettingsUpdate(logger).go();
+        return tVersion.isEqVer(ConstantForAll.PROGRAM_VERSION) ||
+               !tVersion.isEqVerHi(ConstantForAll.PROGRAM_VERSION) ||
+                new XMLSettingsUpdate(logger).go();
     }
 }
