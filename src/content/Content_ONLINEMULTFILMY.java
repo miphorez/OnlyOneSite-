@@ -10,7 +10,8 @@ import java.util.logging.Logger;
 public class Content_ONLINEMULTFILMY extends DecoratorContent {
     private static final String urlMain = "http://onlinemultfilmy.ru/";
     private static final String urlYoutube = "www.youtube.com";
-    private static final String urlYoutubeWatch = "https://www.youtube.com";
+
+    private String strLegalResource;
 
     public Content_ONLINEMULTFILMY(Logger logger, TContent tContent, Messenger messenger) {
         super(logger, tContent, messenger);
@@ -24,9 +25,11 @@ public class Content_ONLINEMULTFILMY extends DecoratorContent {
                 strNewResource = e.getNewResourceLocation();
                 if (isAdminMode() && !utils.ConstantForAll.DEBUG) return;
                 if (!isContentLegal()) {
-                    logger.info("запрещена ссылка: " + strNewResource);
+//                    logger.info("запрещена ссылка: " + strNewResource);
                     e.consume();
                 } else {
+                    strLegalResource = "";
+                    setFlMousePressed(false);
                     logger.info("разрешена ссылка: " + strNewResource);
                 }
             }
@@ -48,6 +51,7 @@ public class Content_ONLINEMULTFILMY extends DecoratorContent {
             public void locationChanged(WebBrowserNavigationEvent e) {
                 super.locationChanged(e);
                 final String strLocation = e.getNewResourceLocation();
+//                logger.info("запрошена ссылка: " + strNewResource);
                 logger.info("загружена ссылка: " + strLocation);
             }
 
@@ -65,8 +69,17 @@ public class Content_ONLINEMULTFILMY extends DecoratorContent {
 
     @Override
     boolean isContentLegal() {
+        //переход только к разрешенному ресурсу в режиме блокировки контента
+        if (
+                isFlBlockContent() &&
+                strNewResource.indexOf(strLegalResource, 0) == 0 &&
+                strNewResource.length() == strLegalResource.trim().length()
+                ) return true;
+        //режим блокировки контента
+        if (isFlBlockContent()) return false;
+        //разрешен контент в рамках правил DOMAIN
         if (strNewResource.indexOf(urlMain, 0) == 0) return true;
-        if (strNewResource.indexOf(urlYoutubeWatch, 0) == 0) return true;
+        //переход на ссылку Youtube в режиме блокировки контента
         if (strNewResource.contains(urlYoutube)) {
             int pos = strNewResource.indexOf("?list=");
             if (pos != -1){
@@ -80,15 +93,15 @@ public class Content_ONLINEMULTFILMY extends DecoratorContent {
                     }
                     if (isFlMousePressed()) {
                         setFlMousePressed(false);
+                        setFlBlockContent(true);
+                        strLegalResource = strNewResource;
+                        logger.info("setFlBlockContent(true)");
                         webBrowser.navigate(strNewResource);
                     }
                     return false;
                 }
             }
         }
-//    https://www.youtube.com/embed/K-yTrFDHpbw?list=PLXnIohISHNIvsnUNe8RwvhksUSFzdQsiT
-//    https://www.youtube.com/watch?list=PLXnIohISHNIvsnUNe8RwvhksUSFzdQsiT&v=K-yTrFDHpbw
-//    https://www.youtube.com/watch?v=K-yTrFDHpbw
         return false;
     }
 

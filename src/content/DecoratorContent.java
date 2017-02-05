@@ -31,6 +31,7 @@ public abstract class DecoratorContent {
     private Messenger messenger;
     private FrmPassword frmPassword;
     private boolean flMousePressed;
+    private boolean flBlockContent;
 
     DecoratorContent(Logger logger, TContent tContent, Messenger messenger) {
         this.logger = logger;
@@ -51,6 +52,13 @@ public abstract class DecoratorContent {
             protected WebBrowserDecorator createWebBrowserDecorator(Component renderingComponent) {
                 return createCustomWebBrowserDecorator(this, renderingComponent);
             }
+
+            @Override
+            public void navigateBack() {
+                flBlockContent = false;
+                logger.info("setFlBlockContent(false)");
+                super.navigateBack();
+            }
         };
 
         webBrowser.getNativeComponent().addMouseListener(new MouseAdapter() {
@@ -62,6 +70,14 @@ public abstract class DecoratorContent {
             @Override
             public void mouseReleased(MouseEvent e) {
                 flMousePressed = true;
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                    flMousePressed = false;
+                }).start();
                 super.mouseReleased(e);
             }
         });
@@ -219,5 +235,13 @@ public abstract class DecoratorContent {
 
     public boolean isFlMousePressed() {
         return flMousePressed;
+    }
+
+    public boolean isFlBlockContent() {
+        return flBlockContent;
+    }
+
+    public void setFlBlockContent(boolean flBlockContent) {
+        this.flBlockContent = flBlockContent;
     }
 }
