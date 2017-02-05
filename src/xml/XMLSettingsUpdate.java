@@ -45,9 +45,13 @@ class XMLSettingsUpdate {
         xmlSettingsNew.setFileName(getFileNameTemp(FILE_XML_PARAMS_TEMP));
         Document docXMLSettingsNew = xmlSettingsNew.getDocXMLSettings();
 
-        transferNodeAttr("", docXMLSettingsOld.getFirstChild(), docXMLSettingsNew);
+        transferOldNodeAttrToNew("", docXMLSettingsOld, docXMLSettingsNew);
         xmlSettingsNew.setRootAttr("Ver", ConstantForAll.PROGRAM_VERSION);
+        transferUserContentToNew(docXMLSettingsOld.getFirstChild(), docXMLSettingsNew);
         return !saveNewSettinsFile(docXMLSettingsNew, getFileNameXMLParams());
+    }
+
+    private void transferUserContentToNew(Node nodeOld, Document docNew) {
     }
 
     private boolean saveNewSettinsFile(Document docXMLSettingsNew, String fileName) {
@@ -72,7 +76,7 @@ class XMLSettingsUpdate {
         return false;
     }
 
-    private static void transferNodeAttr(String strContentName, Node nodeOld, Document docNew) {
+    private static void transferOldNodeAttrToNew(String strContentId, Node nodeOld, Document docNew) {
 
         while ((nodeOld.getNodeType() == Node.COMMENT_NODE)) nodeOld = nodeOld.getNextSibling();
 
@@ -84,25 +88,26 @@ class XMLSettingsUpdate {
         NamedNodeMap attributes = nodeOld.getAttributes();
         if (attributes != null) {
             if (Objects.equals(nodeOld.getNodeName(), NODE_CONTENT)) {
-                strContentName = getContentName(nodeOld, attributes);
+                strContentId = getContentId(nodeOld, attributes);
             }
-            transferAttrToNewSettinsByContentName(docNew, strContentName, nodeOld, attributes);
+            transferAttrToNewSettinsByContentId(docNew, strContentId, nodeOld, attributes);
         }
 
         NodeList children = nodeOld.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
-            transferNodeAttr(strContentName, children.item(i), docNew);
+            transferOldNodeAttrToNew(strContentId, children.item(i), docNew);
         }
     }
 
-    private static void transferAttrToNewSettinsByContentName(Document doc,
-                                                              String strContentName,
-                                                              Node node,
-                                                              NamedNodeMap attributes) {
+    private static void transferAttrToNewSettinsByContentId(Document doc,
+                                                            String strContentId,
+                                                            Node node,
+                                                            NamedNodeMap attributes) {
         for (int i = 0; i < attributes.getLength(); i++) {
             Node attr = attributes.item(i);
+            if (Objects.equals(attr.getNodeName(), "id")) continue;
             setAttrItemContentNode(doc,
-                    strContentName,
+                    strContentId,
                     node.getNodeName(),
                     attr.getNodeName(),
                     attr.getTextContent());
@@ -110,10 +115,10 @@ class XMLSettingsUpdate {
     }
 
     private static boolean setAttrItemContentNode(Document doc,
-                                                  String strContentName,
+                                                  String strContentId,
                                                   String strNodeName,
                                                   String strAttr, String strValue) {
-        if (Objects.equals(strContentName, "")) {
+        if (Objects.equals(strContentId, "")) {
             //базовые атрибуты файла установок
             return setRootAttr(doc, strAttr, strValue);
         }
@@ -123,7 +128,7 @@ class XMLSettingsUpdate {
 
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element node = (Element) nodeList.item(i);
-            if (Objects.equals(node.getAttribute("name"), strContentName)) {
+            if (Objects.equals(node.getAttribute("id"), strContentId)) {
                 if (Objects.equals(strNodeName, NODE_CONTENT)) {
                     node.setAttribute(strAttr, strValue);
                     return true;
@@ -161,13 +166,32 @@ class XMLSettingsUpdate {
         return itemNodeList;
     }
 
-    private static String getContentName(Node node, NamedNodeMap attributes) {
+    private static String getContentId(Node node, NamedNodeMap attributes) {
+        String strContentId = null;
+        for (int i = 0; i < attributes.getLength(); i++) {
+            Node attr = attributes.item(i);
+            if (Objects.equals(node.getNodeName(), NODE_CONTENT) &&
+                    Objects.equals(attr.getNodeName(), "id")) {
+                strContentId = attr.getTextContent();
+                break;
+            }
+        }
+        return strContentId;
+    }
+
+    private static String getContent(Node node, NamedNodeMap attributes) {
         String strContentName = null;
         for (int i = 0; i < attributes.getLength(); i++) {
             Node attr = attributes.item(i);
             if (Objects.equals(node.getNodeName(), NODE_CONTENT) &&
                     Objects.equals(attr.getNodeName(), "name")) {
                 strContentName = attr.getTextContent();
+//                TContent iContent = new TContent(
+//                        node.getAttribute("id"),
+//                        node.getAttribute("link"),
+//                        node.getAttribute("name"),
+//                        node.getAttribute("type"),
+//                        node.getAttribute("modeDel"))
                 break;
             }
         }

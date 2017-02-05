@@ -79,6 +79,11 @@ public class TContent {
 
     public static int getRandomId() {
         Random random = new Random(System.currentTimeMillis());
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return random.nextInt(0x7FFFFFFF);
     }
 
@@ -92,6 +97,10 @@ public class TContent {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setModeDel(boolean modeDel) {
+        this.modeDel = modeDel;
     }
 
     public boolean isModeDel() {

@@ -217,6 +217,7 @@ public abstract class DecoratorContent {
             if (newContent != null) {
                 if (finalFlEditContent) {
                     newContent.setId(tContent.getId());
+                    newContent.setModeDel(tContent.isModeDel());
                     new XMLSettingsUtils(logger).setUpdateContent(newContent);
                 } else {
                     new XMLSettingsAdd(logger).go(newContent);
