@@ -60,6 +60,7 @@ public abstract class DecoratorContent {
                 super.navigateBack();
             }
         };
+        webBrowser.setJavascriptEnabled(true);
 
         webBrowser.getNativeComponent().addMouseListener(new MouseAdapter() {
             @Override
@@ -162,8 +163,25 @@ public abstract class DecoratorContent {
                         showFrmAbout()
                 );
                 buttonBar.add(btnAbout);
+//                final JButton btnJS = new JButton("[JS]");
+//                btnJS.addActionListener(e ->
+//                        goJS()
+//                );
+//                buttonBar.add(btnJS);
             }
         };
+    }
+
+    private void goJS() {
+        final String strJS =
+                "var element = document.getElementsByClassName('footer-wrap');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+//                        "var element = document.getElementsByClassName('post-title');\n" +
+//                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+//                        "var element = document.getElementById('mc-container');\n" +
+//                        "element.parentNode.removeChild(element);" +
+                        "";
+        webBrowser.executeJavascript(strJS);
     }
 
     private void delThisContent() {

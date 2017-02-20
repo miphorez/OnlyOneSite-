@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class Content_ONLINELIFE extends DecoratorContent {
-    private static final String urlMain = "http://http://onlinemultfilmy.ru/";
+    private static final String urlMain = "http://http://www.online-life.cc/";
     private static final String urlBookmarks = "http://www.online-life.cc/favorites/";
     private static final String urlLogOut = "http://www.online-life.cc/index.php?action=logout";
     private static final String urlFavoritesOut = "http://www.online-life.cc/index.php?do=favorites&amp;doaction=del";
@@ -62,8 +62,33 @@ public class Content_ONLINELIFE extends DecoratorContent {
                     bookmarkContent = new BookmarkContent(logger, htmlSource);
                     bookmarkContent.typeList();
                 }
+                goJavaScript();
             }
         });
+    }
+
+    private void goJavaScript() {
+        final String strJS =
+                "var element = document.getElementsByClassName('brnding btop');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+                "var element = document.getElementsByClassName('headb-height');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+                "var element = document.getElementsByClassName('mgbox');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+                "var element = document.getElementById('vk_groups');\n" +
+                        "if (element != null) element.parentNode.removeChild(element);" +
+                "var element = document.getElementsByClassName('block_title');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+                "var element = document.getElementsByClassName('post-title');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+                "var element = document.getElementById('mc-container');\n" +
+                        "if (element != null) element.parentNode.removeChild(element);" +
+                "var element = document.getElementsByClassName('footer-wrap');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+                "var element = document.getElementsByTagName('noindex');\n" +
+                        "while(element[0]) {element[0].parentNode.removeChild(element[0]);}\n" +
+                        "";
+        webBrowser.executeJavascript(strJS);
     }
 
     @Override

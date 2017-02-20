@@ -1,25 +1,16 @@
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import chrriis.common.UIUtils;
+import chrriis.common.WebServer;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-
-import chrriis.common.UIUtils;
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-public class JavascriptExecution {
+public class BookDeleteClassJavascript {
 
     protected static final String LS = System.getProperty("line.separator");
 
@@ -28,23 +19,22 @@ public class JavascriptExecution {
         JPanel webBrowserPanel = new JPanel(new BorderLayout());
         webBrowserPanel.setBorder(BorderFactory.createTitledBorder("Native Web Browser component"));
         final JWebBrowser webBrowser = new JWebBrowser();
-        webBrowser.setBarsVisible(false);
+        webBrowser.setBarsVisible(true);
         webBrowser.setStatusBarVisible(true);
-        final String htmlContent =
-                "<html>" + LS +
-                        "  <body>" + LS +
-                        "    <h1>Some header</h1>" + LS +
-                        "    <p>A paragraph with a <a href=\"http://www.google.com\">link</a>.</p>" + LS +
-                        "  </body>" + LS +
-                        "</html>";
-        webBrowser.setHTMLContent(htmlContent);
+        webBrowser.navigate("http://www.online-life.cc/");
         webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
         contentPane.add(webBrowserPanel, BorderLayout.CENTER);
         JPanel configurationPanel = new JPanel(new BorderLayout());
         configurationPanel.setBorder(BorderFactory.createTitledBorder("Configuration"));
         final JTextArea configurationTextArea = new JTextArea(
-                "document.bgColor = '#FFFF00';" + LS +
-                        "//window.open('http://www.google.com');" + LS);
+                "var list = document.getElementsByTagName('noindex');\n" +
+                        "\n" +
+                        "while(list[0]) {\n" +
+                        "    list[0].parentNode.removeChild(list[0]);\n" +
+                        "}" +
+//                "var element = document.getElementById(\"messageArea\");\n" +
+//                        "element.parentNode.removeChild(element);" +
+                        LS);
         JScrollPane scrollPane = new JScrollPane(configurationTextArea);
         Dimension preferredSize = scrollPane.getPreferredSize();
         preferredSize.height += 20;
@@ -81,7 +71,7 @@ public class JavascriptExecution {
                 JFrame frame = new JFrame("DJ Native Swing Test");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.getContentPane().add(createContent(), BorderLayout.CENTER);
-                frame.setSize(800, 600);
+                frame.setSize(1200, 800);
                 frame.setLocationByPlatform(true);
                 frame.setVisible(true);
             }
